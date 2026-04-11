@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>تسجيل الدخول • منصتي</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', 'Tajawal', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .auth-container {
+      width: 100%;
+      max-width: 480px;
+      perspective: 1000px;
+    }
+
+    .auth-card {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(20px);
+      border-radius: 40px;
+      padding: 35px 25px;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 215, 0, 0.1);
+      transition: all 0.4s ease;
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .auth-header i {
+      font-size: 50px;
+      color: #fbbf24;
+      margin-bottom: 15px;
+      filter: drop-shadow(0 4px 6px rgba(251, 191, 36, 0.3));
+    }
+
+    .auth-header h2 {
+      color: #0f172a;
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+
+    .auth-header p {
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #334155;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .form-group label i {
+      margin-left: 5px;
+      color: #fbbf24;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 15px 18px;
+      border: 2px solid #e2e8f0;
+      border-radius: 20px;
+      font-size: 15px;
+      transition: all 0.3s;
+      background: #f8fafc;
+      direction: rtl;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: #fbbf24;
+      box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.15);
+      background: white;
+    }
+
+    .form-control.error {
+      border-color: #ef4444;
+    }
+
+    .error-message {
+      color: #ef4444;
+      font-size: 12px;
+      margin-top: 5px;
+      display: none;
+    }
+
+    /* تنسيق الايموجي والصور */
+    .avatar-section {
+      margin: 25px 0;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .section-title i {
+      color: #fbbf24;
+      font-size: 18px;
+    }
+
+    .emoji-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .emoji-item {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      background: #f1f5f9;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 3px solid transparent;
+    }
+
+    .emoji-item:hover {
+      transform: scale(1.1);
+      background: #e2e8f0;
+    }
+
+    .emoji-item.selected {
+      border-color: #fbbf24;
+      background: #fef3c7;
+      box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2);
+    }
+
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .image-item {
+      aspect-ratio: 1;
+      border-radius: 50%;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 3px solid transparent;
+    }
+
+    .image-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .image-item:hover {
+      transform: scale(1.05);
+    }
+
+    .image-item.selected {
+      border-color: #fbbf24;
+      box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.3);
+    }
+
+    /* ألوان مخصصة */
+    .colors-section {
+      margin: 25px 0;
+    }
+
+    .color-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      padding: 10px;
+      background: #f8fafc;
+      border-radius: 15px;
+    }
+
+    .color-row label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      color: #334155;
+      margin: 0;
+    }
+
+    .color-row input[type="color"] {
+      width: 60px;
+      height: 40px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      cursor: pointer;
+      padding: 2px;
+    }
+
+    .preview-box {
+      background: linear-gradient(145deg, #ffffff, #f8fafc);
+      border-radius: 20px;
+      padding: 20px;
+      margin: 20px 0;
+      text-align: center;
+      border: 2px dashed #cbd5e1;
+    }
+
+    .preview-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin: 0 auto 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      overflow: hidden;
+      border: 4px solid;
+    }
+
+    .preview-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .preview-name {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .preview-id {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .preview-post {
+      padding: 12px;
+      border-radius: 12px;
+      margin-top: 10px;
+    }
+
+    .user-id-display {
+      background: #f1f5f9;
+      padding: 12px 15px;
+      border-radius: 15px;
+      text-align: center;
+      margin: 15px 0;
+      border: 2px solid #e2e8f0;
+    }
+
+    .user-id-display label {
+      display: block;
+      font-size: 12px;
+      color: #64748b;
+      margin-bottom: 5px;
+    }
+
+    .user-id-display .id-value {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      color: #0f172a;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: #0f172a;
+      border: none;
+      border-radius: 20px;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
+      margin-top: 10px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 35px rgba(251, 191, 36, 0.4);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .toggle-link {
+      text-align: center;
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .toggle-link a {
+      color: #f59e0b;
+      text-decoration: none;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .toggle-link a:hover {
+      color: #d97706;
+      text-decoration: underline;
+    }
+
+    .toggle-link span {
+      color: #64748b;
+    }
+
+    /* شاشة تحميل */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .loading-spinner {
+      background: white;
+      padding: 30px;
+      border-radius: 30px;
+      text-align: center;
+    }
+
+    .loading-spinner i {
+      font-size: 40px;
+      color: #fbbf24;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* إشعار */
+    .toast-message {
+      position: fixed;
+      bottom: 30px;
+      left: 20px;
+      right: 20px;
+      background: #1e293b;
+      color: white;
+      padding: 16px 24px;
+      border-radius: 60px;
+      text-align: center;
+      z-index: 10000;
+      opacity: 0;
+      transition: 0.3s;
+      pointer-events: none;
+      max-width: 400px;
+      margin: 0 auto;
+      font-weight: 600;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .toast-message.show {
+      opacity: 1;
+      bottom: 40px;
+    }
+
+    /* إخفاء قسم التسجيل افتراضياً */
+    #registerForm {
+      display: none;
+    }
+
+    .password-strength {
+      margin-top: 8px;
+      height: 4px;
+      background: #e2e8f0;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .password-strength-bar {
+      height: 100%;
+      width: 0%;
+      transition: all 0.3s;
+      border-radius: 2px;
+    }
+
+    .strength-weak { background: #ef4444; width: 33%; }
+    .strength-medium { background: #f59e0b; width: 66%; }
+    .strength-strong { background: #10b981; width: 100%; }
+
+    /* إشعار النجاح مع مؤقت */
+    .success-redirect {
+      background: #10b981;
+      color: white;
+      padding: 15px;
+      border-radius: 15px;
+      margin-top: 20px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .success-redirect i {
+      margin-left: 8px;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="auth-container">
+  <div class="auth-card">
+    <!-- نموذج تسجيل الدخول -->
+    <div id="loginForm">
+      <div class="auth-header">
+        <i class="fas fa-crown"></i>
+        <h2>تسجيل الدخول</h2>
+        <p>مرحباً بعودتك! أدخل بياناتك للمتابعة</p>
+      </div>
+
+      <div class="form-group">
+        <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+        <input type="email" id="loginEmail" class="form-control" placeholder="example@email.com" dir="ltr">
+        <div class="error-message" id="loginEmailError"></div>
+      </div>
+
+      <div class="form-group">
+        <label><i class="fas fa-lock"></i> كلمة المرور</label>
+        <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" dir="ltr">
+        <div class="error-message" id="loginPasswordError"></div>
+      </div>
+
+      <div id="loginSuccessMessage" style="display: none;"></div>
+
+      <button class="btn-submit" onclick="handleLogin()">
+        <i class="fas fa-sign-in-alt"></i> دخول
+      </button>
+
+      <div class="toggle-link">
+        <span>ليس لديك حساب؟</span>
+        <a onclick="toggleForms('register')">إنشاء حساب جديد</a>
+      </div>
+    </div>
+
+    <!-- نموذج التسجيل -->
+    <div id="registerForm">
+      <div class="auth-header">
+        <i class="fas fa-user-plus"></i>
+        <h2>إنشاء حساب</h2>
+        <p>انضم إلينا وابدأ رحلتك</p>
+      </div>
+
+      <div class="form-group">
+        <label><i class="fas fa-user"></i> الاسم الكامل</label>
+        <input type="text" id="regName" class="form-control" placeholder="محمد أحمد">
+        <div class="error-message" id="regNameError"></div>
+      </div>
+
+      <div class="form-group">
+        <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+        <input type="email" id="regEmail" class="form-control" placeholder="example@email.com" dir="ltr">
+        <div class="error-message" id="regEmailError"></div>
+      </div>
+
+      <div class="form-group">
+        <label><i class="fas fa-lock"></i> كلمة المرور</label>
+        <input type="password" id="regPassword" class="form-control" placeholder="••••••••" dir="ltr" onkeyup="checkPasswordStrength()">
+        <div class="password-strength">
+          <div class="password-strength-bar" id="passwordStrengthBar"></div>
+        </div>
+        <div class="error-message" id="regPasswordError"></div>
+      </div>
+
+      <div class="form-group">
+        <label><i class="fas fa-check-circle"></i> تأكيد كلمة المرور</label>
+        <input type="password" id="regConfirmPassword" class="form-control" placeholder="••••••••" dir="ltr">
+        <div class="error-message" id="regConfirmError"></div>
+      </div>
+
+      <!-- المعرف الخاص -->
+      <div class="user-id-display">
+        <label><i class="fas fa-id-card"></i> المعرف الخاص بك</label>
+        <div class="id-value" id="generatedUserId">------</div>
+        <small style="color: #64748b;">معرف فريد من 6 أرقام</small>
+      </div>
+
+      <!-- اختيار الايموجي -->
+      <div class="avatar-section">
+        <div class="section-title">
+          <i class="fas fa-smile"></i>
+          <span>اختر إيموجي</span>
+        </div>
+        <div class="emoji-grid" id="emojiGrid"></div>
+      </div>
+
+      <!-- اختيار الصورة -->
+      <div class="avatar-section">
+        <div class="section-title">
+          <i class="fas fa-image"></i>
+          <span>اختر صورة من الإنترنت</span>
+        </div>
+        <div class="image-grid" id="imageGrid"></div>
+      </div>
+
+      <!-- الألوان المخصصة -->
+      <div class="colors-section">
+        <div class="section-title">
+          <i class="fas fa-palette"></i>
+          <span>تخصيص الألوان</span>
+        </div>
+
+        <div class="color-row">
+          <label><i class="fas fa-border-all"></i> لون الإطار</label>
+          <input type="color" id="frameColor" value="#fbbf24" onchange="updatePreview()">
+        </div>
+
+        <div class="color-row">
+          <label><i class="fas fa-signature"></i> لون الاسم</label>
+          <input type="color" id="nameColor" value="#0f172a" onchange="updatePreview()">
+        </div>
+
+        <div class="color-row">
+          <label><i class="fas fa-id-badge"></i> لون المعرف</label>
+          <input type="color" id="idColor" value="#8b5cf6" onchange="updatePreview()">
+        </div>
+
+        <div class="color-row">
+          <label><i class="fas fa-pen"></i> لون كتابة المنشور</label>
+          <input type="color" id="postTextColor" value="#334155" onchange="updatePreview()">
+        </div>
+
+        <div class="color-row">
+          <label><i class="fas fa-comment"></i> لون خط التعليق</label>
+          <input type="color" id="commentTextColor" value="#475569" onchange="updatePreview()">
+        </div>
+      </div>
+
+      <!-- معاينة -->
+      <div class="preview-box">
+        <div class="preview-avatar" id="previewAvatar" style="border-color: #fbbf24;">
+          <span id="previewEmoji">😎</span>
+        </div>
+        <div class="preview-name" id="previewName" style="color: #0f172a;">محمد أحمد</div>
+        <div class="preview-id" id="previewId" style="background: #fbbf24; color: #8b5cf6;">#123456</div>
+        <div class="preview-post" id="previewPost" style="color: #334155;">
+          <i class="fas fa-quote-right" style="opacity: 0.5;"></i> 
+          هذا مثال لمنشورك...
+        </div>
+        <div style="color: #475569; font-size: 13px; margin-top: 8px;">
+          <i class="fas fa-comment"></i> مثال على التعليقات
+        </div>
+      </div>
+
+      <div id="registerSuccessMessage" style="display: none;"></div>
+
+      <button class="btn-submit" onclick="handleRegister()">
+        <i class="fas fa-user-check"></i> إنشاء الحساب
+      </button>
+
+      <div class="toggle-link">
+        <span>لديك حساب بالفعل؟</span>
+        <a onclick="toggleForms('login')">تسجيل الدخول</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- شاشة التحميل -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-spinner">
+    <i class="fas fa-spinner"></i>
+    <p style="margin-top: 15px; color: #0f172a; font-weight: 600;">جاري المعالجة...</p>
+  </div>
+</div>
+
+<!-- رسالة الإشعار -->
+<div class="toast-message" id="toastMessage"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDYKCCTcurNcJslrNKqdiJCoIIK-YZArB4",
+    authDomain: "sbaq-fc46f.firebaseapp.com",
+    projectId: "sbaq-fc46f",
+    storageBucket: "sbaq-fc46f.firebasestorage.app",
+    appId: "1:1026865750415:web:0ee39a717bcafaa0d06bfa"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // المتغيرات
+  let selectedEmoji = '😎';
+  let selectedImage = '';
+  let avatarType = 'emoji';
+  let generatedId = '';
+
+  // قائمة الايموجيات
+  const emojis = ['😎', '👑', '🦊', '🐼', '🐸', '🐶', '🦁', '🐧', '🐨', '🦝', '🐱', '🐻', '🦄', '🐙', '🦋', '🌟', '⭐', '🌙', '☀️', '🔥', '💎', '🎮', '⚡', '💫'];
+
+  // قائمة الصور من الإنترنت
+  const imageUrls = [
+    'https://i.pravatar.cc/150?img=1',
+    'https://i.pravatar.cc/150?img=2',
+    'https://i.pravatar.cc/150?img=3',
+    'https://i.pravatar.cc/150?img=4',
+    'https://i.pravatar.cc/150?img=5',
+    'https://i.pravatar.cc/150?img=6',
+    'https://i.pravatar.cc/150?img=7',
+    'https://i.pravatar.cc/150?img=8',
+    'https://i.pravatar.cc/150?img=9',
+    'https://i.pravatar.cc/150?img=10',
+    'https://i.pravatar.cc/150?img=11',
+    'https://i.pravatar.cc/150?img=12'
+  ];
+
+  // التحقق من وجود مستخدم مسجل دخوله مسبقاً
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // المستخدم مسجل دخوله بالفعل
+      checkAndRedirectUser(user);
+    }
+  });
+
+  // التحقق من بيانات المستخدم وإعادة التوجيه
+  async function checkAndRedirectUser(user) {
+    try {
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        localStorage.setItem('currentUser', JSON.stringify({
+          uid: user.uid,
+          email: user.email,
+          ...userData
+        }));
+        
+        // عرض رسالة نجاح بدلاً من التوجيه التلقائي
+        showSuccessMessage(userData);
+      }
+    } catch (error) {
+      console.error('خطأ في التحقق من بيانات المستخدم:', error);
+    }
+  }
+
+  // عرض رسالة نجاح بدلاً من التوجيه لصفحة غير موجودة
+  function showSuccessMessage(userData) {
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    
+    // إخفاء النماذج
+    loginForm.style.display = 'none';
+    registerForm.style.display = 'none';
+    
+    // عرض رسالة نجاح
+    const container = document.querySelector('.auth-card');
+    container.innerHTML = `
+      <div class="auth-header">
+        <i class="fas fa-check-circle" style="color: #10b981;"></i>
+        <h2>تم تسجيل الدخول بنجاح!</h2>
+        <p>مرحباً ${userData.name || 'مستخدم'}</p>
+      </div>
+      
+      <div class="preview-box" style="margin: 20px 0;">
+        <div class="preview-avatar" style="border-color: ${userData.colors?.frame || '#fbbf24'}; margin: 0 auto 15px;">
+          ${userData.avatarType === 'image' && userData.avatarUrl ? 
+            `<img src="${userData.avatarUrl}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://i.pravatar.cc/150?img=1'">` : 
+            `<span style="font-size: 40px;">${userData.emoji || '😎'}</span>`
+          }
+        </div>
+        <div class="preview-name" style="color: ${userData.colors?.name || '#0f172a'};">${userData.name}</div>
+        <div class="preview-id" style="background: ${userData.colors?.frame || '#fbbf24'}; color: ${userData.colors?.id || '#8b5cf6'};">#${userData.userId}</div>
+      </div>
+      
+      <div class="success-redirect">
+        <i class="fas fa-check-circle"></i>
+        تم إضافة حسابك بنجاح! يمكنك الآن استخدام المنصة.
+      </div>
+      
+      <div style="margin-top: 30px; text-align: center; color: #64748b;">
+        <p>حسابك جاهز للاستخدام في جميع صفحات المنصة</p>
+        <p style="margin-top: 15px; font-size: 13px;">
+          <i class="fas fa-id-card"></i> معرفك: ${userData.userId}
+        </p>
+      </div>
+      
+      <button class="btn-submit" onclick="window.location.reload()" style="margin-top: 30px;">
+        <i class="fas fa-sync-alt"></i> تسجيل حساب آخر
+      </button>
+    `;
+  }
+
+  // تهيئة الصفحة
+  function initPage() {
+    generatedId = generateUniqueId();
+    document.getElementById('generatedUserId').textContent = generatedId;
+
+    const emojiGrid = document.getElementById('emojiGrid');
+    emojiGrid.innerHTML = emojis.map(emoji => 
+      `<div class="emoji-item ${selectedEmoji === emoji ? 'selected' : ''}" onclick="selectEmoji('${emoji}')">${emoji}</div>`
+    ).join('');
+
+    const imageGrid = document.getElementById('imageGrid');
+    imageGrid.innerHTML = imageUrls.map(url => 
+      `<div class="image-item ${selectedImage === url && avatarType === 'image' ? 'selected' : ''}" onclick="selectImage('${url}')">
+        <img src="${url}" alt="Avatar" onerror="this.src='https://i.pravatar.cc/150?img=1'">
+      </div>`
+    ).join('');
+
+    document.getElementById('regName').addEventListener('input', (e) => {
+      const name = e.target.value || 'محمد أحمد';
+      document.getElementById('previewName').textContent = name;
+    });
+  }
+
+  function generateUniqueId() {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+  }
+
+  async function generateAndCheckUniqueId() {
+    let id = generateUniqueId();
+    let isUnique = false;
+    let attempts = 0;
+    
+    while (!isUnique && attempts < 10) {
+      const userDoc = await getDoc(doc(db, "users_by_id", id));
+      if (!userDoc.exists()) {
+        isUnique = true;
+      } else {
+        id = generateUniqueId();
+        attempts++;
+      }
+    }
+    
+    return id;
+  }
+
+  window.selectEmoji = function(emoji) {
+    selectedEmoji = emoji;
+    selectedImage = '';
+    avatarType = 'emoji';
+    
+    document.querySelectorAll('.emoji-item').forEach(el => el.classList.remove('selected'));
+    document.querySelectorAll('.image-item').forEach(el => el.classList.remove('selected'));
+    
+    event.target.closest('.emoji-item').classList.add('selected');
+    
+    updatePreview();
+  };
+
+  window.selectImage = function(url) {
+    selectedImage = url;
+    avatarType = 'image';
+    
+    document.querySelectorAll('.emoji-item').forEach(el => el.classList.remove('selected'));
+    document.querySelectorAll('.image-item').forEach(el => el.classList.remove('selected'));
+    
+    event.target.closest('.image-item').classList.add('selected');
+    
+    updatePreview();
+  };
+
+  window.updatePreview = function() {
+    const previewAvatar = document.getElementById('previewAvatar');
+    const previewEmoji = document.getElementById('previewEmoji');
+    const previewId = document.getElementById('previewId');
+    const previewPost = document.getElementById('previewPost');
+    
+    if (avatarType === 'image' && selectedImage) {
+      previewEmoji.innerHTML = `<img src="${selectedImage}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://i.pravatar.cc/150?img=1'">`;
+    } else {
+      previewEmoji.textContent = selectedEmoji;
+    }
+    
+    const frameColor = document.getElementById('frameColor').value;
+    const nameColor = document.getElementById('nameColor').value;
+    const idColor = document.getElementById('idColor').value;
+    const postTextColor = document.getElementById('postTextColor').value;
+    const commentTextColor = document.getElementById('commentTextColor').value;
+    
+    previewAvatar.style.borderColor = frameColor;
+    document.getElementById('previewName').style.color = nameColor;
+    previewId.style.backgroundColor = frameColor;
+    previewId.style.color = idColor;
+    previewId.textContent = `#${generatedId}`;
+    previewPost.style.color = postTextColor;
+    document.querySelector('.preview-box div:last-child').style.color = commentTextColor;
+  };
+
+  window.checkPasswordStrength = function() {
+    const password = document.getElementById('regPassword').value;
+    const bar = document.getElementById('passwordStrengthBar');
+    
+    bar.className = 'password-strength-bar';
+    
+    if (password.length === 0) {
+      bar.style.width = '0%';
+    } else if (password.length < 6) {
+      bar.classList.add('strength-weak');
+    } else if (password.length < 10) {
+      bar.classList.add('strength-medium');
+    } else {
+      bar.classList.add('strength-strong');
+    }
+  };
+
+  window.toggleForms = function(form) {
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    
+    if (form === 'login') {
+      loginForm.style.display = 'block';
+      registerForm.style.display = 'none';
+    } else {
+      loginForm.style.display = 'none';
+      registerForm.style.display = 'block';
+      initPage();
+    }
+    
+    clearErrors();
+  };
+
+  function clearErrors() {
+    document.querySelectorAll('.error-message').forEach(el => {
+      el.style.display = 'none';
+      el.textContent = '';
+    });
+    document.querySelectorAll('.form-control').forEach(el => el.classList.remove('error'));
+  }
+
+  function showError(fieldId, message) {
+    const field = document.getElementById(fieldId);
+    const errorDiv = document.getElementById(fieldId + 'Error');
+    
+    if (field) field.classList.add('error');
+    if (errorDiv) {
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+    }
+  }
+
+  function showToast(message, isSuccess = true) {
+    const toast = document.getElementById('toastMessage');
+    toast.textContent = message;
+    toast.style.background = isSuccess ? '#10b981' : '#ef4444';
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3000);
+  }
+
+  function showLoading(show) {
+    document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
+  }
+
+  // عرض رسالة نجاح التسجيل
+  function showRegisterSuccess(userData) {
+    const registerForm = document.getElementById('registerForm');
+    const container = document.querySelector('.auth-card');
+    
+    container.innerHTML = `
+      <div class="auth-header">
+        <i class="fas fa-check-circle" style="color: #10b981;"></i>
+        <h2>تم إنشاء الحساب بنجاح!</h2>
+        <p>مرحباً ${userData.name}</p>
+      </div>
+      
+      <div class="preview-box" style="margin: 20px 0;">
+        <div class="preview-avatar" style="border-color: ${userData.colors.frame}; margin: 0 auto 15px;">
+          ${userData.avatarType === 'image' && userData.avatarUrl ? 
+            `<img src="${userData.avatarUrl}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://i.pravatar.cc/150?img=1'">` : 
+            `<span style="font-size: 40px;">${userData.emoji}</span>`
+          }
+        </div>
+        <div class="preview-name" style="color: ${userData.colors.name};">${userData.name}</div>
+        <div class="preview-id" style="background: ${userData.colors.frame}; color: ${userData.colors.id};">#${userData.userId}</div>
+      </div>
+      
+      <div class="success-redirect">
+        <i class="fas fa-check-circle"></i>
+        تم إنشاء حسابك بنجاح! معرفك: ${userData.userId}
+      </div>
+      
+      <div style="margin-top: 30px; text-align: center; color: #64748b;">
+        <p>حسابك جاهز للاستخدام في جميع صفحات المنصة</p>
+        <p style="margin-top: 15px; font-size: 13px;">
+          <i class="fas fa-coins"></i> لقد حصلت على: 1000 عملة ذهبية، 10 ذهب، 10 إكسير، 100 نفط
+        </p>
+      </div>
+      
+      <button class="btn-submit" onclick="window.location.reload()" style="margin-top: 30px;">
+        <i class="fas fa-sign-in-alt"></i> الذهاب لتسجيل الدخول
+      </button>
+    `;
+  }
+
+  window.handleLogin = async function() {
+    clearErrors();
+    
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    
+    let hasError = false;
+    
+    if (!email) {
+      showError('loginEmail', 'البريد الإلكتروني مطلوب');
+      hasError = true;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showError('loginEmail', 'بريد إلكتروني غير صالح');
+      hasError = true;
+    }
+    
+    if (!password) {
+      showError('loginPassword', 'كلمة المرور مطلوبة');
+      hasError = true;
+    }
+    
+    if (hasError) return;
+    
+    showLoading(true);
+    
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        localStorage.setItem('currentUser', JSON.stringify({
+          uid: user.uid,
+          email: user.email,
+          ...userData
+        }));
+        
+        showToast('تم تسجيل الدخول بنجاح!', true);
+        showSuccessMessage(userData);
+      } else {
+        showToast('بيانات المستخدم غير مكتملة', false);
+      }
+    } catch (error) {
+      let errorMessage = 'فشل تسجيل الدخول';
+      
+      switch (error.code) {
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
+          errorMessage = 'البريد الإلكتروني أو كلمة المرور غير صحيحة';
+          break;
+        case 'auth/invalid-email':
+          errorMessage = 'بريد إلكتروني غير صالح';
+          break;
+        case 'auth/user-disabled':
+          errorMessage = 'تم تعطيل هذا الحساب';
+          break;
+        default:
+          errorMessage = error.message;
+      }
+      
+      showToast(errorMessage, false);
+    } finally {
+      showLoading(false);
+    }
+  };
+
+  window.handleRegister = async function() {
+    clearErrors();
+    
+    const name = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const password = document.getElementById('regPassword').value;
+    const confirmPassword = document.getElementById('regConfirmPassword').value;
+    
+    let hasError = false;
+    
+    if (!name) {
+      showError('regName', 'الاسم مطلوب');
+      hasError = true;
+    } else if (name.length < 3) {
+      showError('regName', 'الاسم يجب أن يكون 3 أحرف على الأقل');
+      hasError = true;
+    }
+    
+    if (!email) {
+      showError('regEmail', 'البريد الإلكتروني مطلوب');
+      hasError = true;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showError('regEmail', 'بريد إلكتروني غير صالح');
+      hasError = true;
+    }
+    
+    if (!password) {
+      showError('regPassword', 'كلمة المرور مطلوبة');
+      hasError = true;
+    } else if (password.length < 6) {
+      showError('regPassword', 'كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+      hasError = true;
+    }
+    
+    if (password !== confirmPassword) {
+      showError('regConfirm', 'كلمتا المرور غير متطابقتين');
+      hasError = true;
+    }
+    
+    if (hasError) return;
+    
+    showLoading(true);
+    
+    try {
+      const finalId = await generateAndCheckUniqueId();
+      document.getElementById('generatedUserId').textContent = finalId;
+      generatedId = finalId;
+      updatePreview();
+      
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      
+      const userData = {
+        uid: user.uid,
+        email: email,
+        name: name,
+        username: name,
+        userId: finalId,
+        emoji: avatarType === 'emoji' ? selectedEmoji : '😎',
+        avatarType: avatarType,
+        avatarUrl: avatarType === 'image' ? selectedImage : '',
+        colors: {
+          frame: document.getElementById('frameColor').value,
+          name: document.getElementById('nameColor').value,
+          id: document.getElementById('idColor').value,
+          postText: document.getElementById('postTextColor').value,
+          commentText: document.getElementById('commentTextColor').value,
+          text: document.getElementById('postTextColor').value
+        },
+        createdAt: new Date().toISOString(),
+        followers: [],
+        following: [],
+        resources: {
+          gold: 10,
+          elixir: 10,
+          money: 1000,
+          oil: 100
+        }
+      };
+      
+      await setDoc(doc(db, "users", user.uid), userData);
+      await setDoc(doc(db, "users_by_id", finalId), { uid: user.uid });
+      await setDoc(doc(db, "resources", user.uid), userData.resources);
+      
+      localStorage.setItem('currentUser', JSON.stringify(userData));
+      
+      showToast('تم إنشاء الحساب بنجاح! معرفك: ' + finalId, true);
+      showRegisterSuccess(userData);
+      
+    } catch (error) {
+      let errorMessage = 'فشل إنشاء الحساب';
+      
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          errorMessage = 'البريد الإلكتروني مستخدم بالفعل';
+          break;
+        case 'auth/invalid-email':
+          errorMessage = 'بريد إلكتروني غير صالح';
+          break;
+        case 'auth/weak-password':
+          errorMessage = 'كلمة المرور ضعيفة جداً';
+          break;
+        default:
+          errorMessage = error.message;
+      }
+      
+      showToast(errorMessage, false);
+    } finally {
+      showLoading(false);
+    }
+  };
+
+  window.addEventListener('load', () => {
+    initPage();
+    
+    document.getElementById('loginEmail')?.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') handleLogin();
+    });
+    
+    document.getElementById('loginPassword')?.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') handleLogin();
+    });
+    
+    document.getElementById('regName')?.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') handleRegister();
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const nameInput = document.getElementById('regName');
+    if (nameInput) {
+      nameInput.addEventListener('input', (e) => {
+        const name = e.target.value || 'محمد أحمد';
+        document.getElementById('previewName').textContent = name;
+      });
+    }
+  });
+</script>
+</body>
+</html>
