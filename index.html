@@ -424,32 +424,66 @@
     .strength-medium { background: #f59e0b; width: 66%; }
     .strength-strong { background: #10b981; width: 100%; }
 
-    /* إشعار النجاح مع مؤقت */
-    .success-redirect {
-      background: #10b981;
-      color: white;
-      padding: 15px;
-      border-radius: 15px;
-      margin-top: 20px;
+    /* رسالة النجاح */
+    .success-message-container {
       text-align: center;
-      font-weight: 600;
+      padding: 20px;
     }
 
-    .success-redirect i {
-      margin-left: 8px;
-      animation: pulse 1.5s infinite;
+    .success-message-container i {
+      font-size: 60px;
+      color: #10b981;
+      margin-bottom: 20px;
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
+    .success-message-container h3 {
+      color: #0f172a;
+      margin-bottom: 15px;
+      font-size: 22px;
+    }
+
+    .success-message-container p {
+      color: #64748b;
+      margin-bottom: 20px;
+    }
+
+    .user-id-success {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      padding: 15px;
+      border-radius: 18px;
+      margin: 20px 0;
+    }
+
+    .user-id-success .id-label {
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .user-id-success .id-number {
+      font-size: 36px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: 3px;
+    }
+
+    .continue-btn {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border: none;
+      padding: 16px 30px;
+      border-radius: 20px;
+      font-weight: 800;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      width: 100%;
     }
   </style>
 </head>
 <body>
 
 <div class="auth-container">
-  <div class="auth-card">
+  <div class="auth-card" id="authCard">
     <!-- نموذج تسجيل الدخول -->
     <div id="loginForm">
       <div class="auth-header">
@@ -469,8 +503,6 @@
         <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" dir="ltr">
         <div class="error-message" id="loginPasswordError"></div>
       </div>
-
-      <div id="loginSuccessMessage" style="display: none;"></div>
 
       <button class="btn-submit" onclick="handleLogin()">
         <i class="fas fa-sign-in-alt"></i> دخول
@@ -591,8 +623,6 @@
         </div>
       </div>
 
-      <div id="registerSuccessMessage" style="display: none;"></div>
-
       <button class="btn-submit" onclick="handleRegister()">
         <i class="fas fa-user-check"></i> إنشاء الحساب
       </button>
@@ -618,7 +648,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
+  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
   import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -658,19 +688,16 @@
     'https://i.pravatar.cc/150?img=12'
   ];
 
-  // التحقق من وجود مستخدم مسجل دخوله مسبقاً
+  // التحقق من وجود مستخدم مسجل مسبقاً
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      // المستخدم مسجل دخوله بالفعل
-      checkAndRedirectUser(user);
+      checkAndShowSuccess(user);
     }
   });
 
-  // التحقق من بيانات المستخدم وإعادة التوجيه
-  async function checkAndRedirectUser(user) {
+  async function checkAndShowSuccess(user) {
     try {
       const userDoc = await getDoc(doc(db, "users", user.uid));
-      
       if (userDoc.exists()) {
         const userData = userDoc.data();
         localStorage.setItem('currentUser', JSON.stringify({
@@ -678,59 +705,80 @@
           email: user.email,
           ...userData
         }));
-        
-        // عرض رسالة نجاح بدلاً من التوجيه التلقائي
-        showSuccessMessage(userData);
+        showLoginSuccessMessage(userData);
       }
     } catch (error) {
-      console.error('خطأ في التحقق من بيانات المستخدم:', error);
+      console.error('خطأ:', error);
     }
   }
 
-  // عرض رسالة نجاح بدلاً من التوجيه لصفحة غير موجودة
-  function showSuccessMessage(userData) {
-    const loginForm = document.getElementById('loginForm');
-    const registerForm = document.getElementById('registerForm');
-    
-    // إخفاء النماذج
-    loginForm.style.display = 'none';
-    registerForm.style.display = 'none';
-    
-    // عرض رسالة نجاح
-    const container = document.querySelector('.auth-card');
-    container.innerHTML = `
-      <div class="auth-header">
-        <i class="fas fa-check-circle" style="color: #10b981;"></i>
-        <h2>تم تسجيل الدخول بنجاح!</h2>
-        <p>مرحباً ${userData.name || 'مستخدم'}</p>
-      </div>
-      
-      <div class="preview-box" style="margin: 20px 0;">
-        <div class="preview-avatar" style="border-color: ${userData.colors?.frame || '#fbbf24'}; margin: 0 auto 15px;">
-          ${userData.avatarType === 'image' && userData.avatarUrl ? 
-            `<img src="${userData.avatarUrl}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://i.pravatar.cc/150?img=1'">` : 
-            `<span style="font-size: 40px;">${userData.emoji || '😎'}</span>`
-          }
-        </div>
-        <div class="preview-name" style="color: ${userData.colors?.name || '#0f172a'};">${userData.name}</div>
-        <div class="preview-id" style="background: ${userData.colors?.frame || '#fbbf24'}; color: ${userData.colors?.id || '#8b5cf6'};">#${userData.userId}</div>
-      </div>
-      
-      <div class="success-redirect">
+  function showLoginSuccessMessage(userData) {
+    const card = document.getElementById('authCard');
+    card.innerHTML = `
+      <div class="success-message-container">
         <i class="fas fa-check-circle"></i>
-        تم إضافة حسابك بنجاح! يمكنك الآن استخدام المنصة.
+        <h3>تم تسجيل الدخول بنجاح!</h3>
+        <p>مرحباً بعودتك ${userData.name || userData.username || 'مستخدم'}</p>
+        
+        <div class="preview-box" style="margin: 20px 0;">
+          <div class="preview-avatar" style="border-color: ${userData.colors?.frame || '#fbbf24'}; margin: 0 auto 15px;">
+            ${userData.avatarType === 'image' && userData.avatarUrl ? 
+              `<img src="${userData.avatarUrl}" style="width:100%;height:100%;object-fit:cover;">` : 
+              `<span style="font-size: 40px;">${userData.emoji || '😎'}</span>`
+            }
+          </div>
+          <div class="preview-name" style="color: ${userData.colors?.name || '#0f172a'};">${userData.name || userData.username}</div>
+          <div class="preview-id" style="background: ${userData.colors?.frame || '#fbbf24'}; color: ${userData.colors?.id || '#8b5cf6'};">#${userData.userId}</div>
+        </div>
+        
+        <div class="user-id-success">
+          <div class="id-label"><i class="fas fa-id-card"></i> معرفك</div>
+          <div class="id-number">${userData.userId}</div>
+        </div>
+        
+        <p style="color: #64748b; margin: 15px 0;">حسابك جاهز للاستخدام في المنصة</p>
+        
+        <button class="continue-btn" onclick="window.location.reload()">
+          <i class="fas fa-sync-alt"></i> تسجيل حساب آخر
+        </button>
       </div>
-      
-      <div style="margin-top: 30px; text-align: center; color: #64748b;">
-        <p>حسابك جاهز للاستخدام في جميع صفحات المنصة</p>
-        <p style="margin-top: 15px; font-size: 13px;">
-          <i class="fas fa-id-card"></i> معرفك: ${userData.userId}
-        </p>
+    `;
+  }
+
+  function showRegisterSuccessMessage(userData) {
+    const card = document.getElementById('authCard');
+    card.innerHTML = `
+      <div class="success-message-container">
+        <i class="fas fa-check-circle"></i>
+        <h3>تم إنشاء الحساب بنجاح!</h3>
+        <p>مرحباً ${userData.name}</p>
+        
+        <div class="preview-box" style="margin: 20px 0;">
+          <div class="preview-avatar" style="border-color: ${userData.colors.frame}; margin: 0 auto 15px;">
+            ${userData.avatarType === 'image' && userData.avatarUrl ? 
+              `<img src="${userData.avatarUrl}" style="width:100%;height:100%;object-fit:cover;">` : 
+              `<span style="font-size: 40px;">${userData.emoji}</span>`
+            }
+          </div>
+          <div class="preview-name" style="color: ${userData.colors.name};">${userData.name}</div>
+          <div class="preview-id" style="background: ${userData.colors.frame}; color: ${userData.colors.id};">#${userData.userId}</div>
+        </div>
+        
+        <div class="user-id-success">
+          <div class="id-label"><i class="fas fa-id-card"></i> معرفك الخاص</div>
+          <div class="id-number">${userData.userId}</div>
+          <small style="color: #92400e;">احفظ هذا المعرف - ستحتاجه لتسجيل الدخول</small>
+        </div>
+        
+        <div style="margin: 20px 0; padding: 15px; background: #ecfdf5; border-radius: 15px; color: #059669;">
+          <i class="fas fa-gift"></i>
+          <p style="margin-top: 5px;">لقد حصلت على: 1000 عملة، 10 ذهب، 10 إكسير، 100 نفط</p>
+        </div>
+        
+        <button class="continue-btn" onclick="window.location.reload()">
+          <i class="fas fa-sign-in-alt"></i> الذهاب لتسجيل الدخول
+        </button>
       </div>
-      
-      <button class="btn-submit" onclick="window.location.reload()" style="margin-top: 30px;">
-        <i class="fas fa-sync-alt"></i> تسجيل حساب آخر
-      </button>
     `;
   }
 
@@ -898,47 +946,6 @@
     document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
   }
 
-  // عرض رسالة نجاح التسجيل
-  function showRegisterSuccess(userData) {
-    const registerForm = document.getElementById('registerForm');
-    const container = document.querySelector('.auth-card');
-    
-    container.innerHTML = `
-      <div class="auth-header">
-        <i class="fas fa-check-circle" style="color: #10b981;"></i>
-        <h2>تم إنشاء الحساب بنجاح!</h2>
-        <p>مرحباً ${userData.name}</p>
-      </div>
-      
-      <div class="preview-box" style="margin: 20px 0;">
-        <div class="preview-avatar" style="border-color: ${userData.colors.frame}; margin: 0 auto 15px;">
-          ${userData.avatarType === 'image' && userData.avatarUrl ? 
-            `<img src="${userData.avatarUrl}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://i.pravatar.cc/150?img=1'">` : 
-            `<span style="font-size: 40px;">${userData.emoji}</span>`
-          }
-        </div>
-        <div class="preview-name" style="color: ${userData.colors.name};">${userData.name}</div>
-        <div class="preview-id" style="background: ${userData.colors.frame}; color: ${userData.colors.id};">#${userData.userId}</div>
-      </div>
-      
-      <div class="success-redirect">
-        <i class="fas fa-check-circle"></i>
-        تم إنشاء حسابك بنجاح! معرفك: ${userData.userId}
-      </div>
-      
-      <div style="margin-top: 30px; text-align: center; color: #64748b;">
-        <p>حسابك جاهز للاستخدام في جميع صفحات المنصة</p>
-        <p style="margin-top: 15px; font-size: 13px;">
-          <i class="fas fa-coins"></i> لقد حصلت على: 1000 عملة ذهبية، 10 ذهب، 10 إكسير، 100 نفط
-        </p>
-      </div>
-      
-      <button class="btn-submit" onclick="window.location.reload()" style="margin-top: 30px;">
-        <i class="fas fa-sign-in-alt"></i> الذهاب لتسجيل الدخول
-      </button>
-    `;
-  }
-
   window.handleLogin = async function() {
     clearErrors();
     
@@ -979,7 +986,7 @@
         }));
         
         showToast('تم تسجيل الدخول بنجاح!', true);
-        showSuccessMessage(userData);
+        showLoginSuccessMessage(userData);
       } else {
         showToast('بيانات المستخدم غير مكتملة', false);
       }
@@ -1078,23 +1085,22 @@
         },
         createdAt: new Date().toISOString(),
         followers: [],
-        following: [],
-        resources: {
-          gold: 10,
-          elixir: 10,
-          money: 1000,
-          oil: 100
-        }
+        following: []
       };
       
       await setDoc(doc(db, "users", user.uid), userData);
       await setDoc(doc(db, "users_by_id", finalId), { uid: user.uid });
-      await setDoc(doc(db, "resources", user.uid), userData.resources);
+      await setDoc(doc(db, "resources", user.uid), {
+        gold: 10,
+        elixir: 10,
+        money: 1000,
+        oil: 100
+      });
       
       localStorage.setItem('currentUser', JSON.stringify(userData));
       
-      showToast('تم إنشاء الحساب بنجاح! معرفك: ' + finalId, true);
-      showRegisterSuccess(userData);
+      showToast('تم إنشاء الحساب بنجاح!', true);
+      showRegisterSuccessMessage(userData);
       
     } catch (error) {
       let errorMessage = 'فشل إنشاء الحساب';
