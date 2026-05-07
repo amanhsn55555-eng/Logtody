@@ -29,6 +29,12 @@
     
     .toggle-link{text-align:center;margin-top:24px;padding-top:18px;border-top:1px solid #e2e8f0;color:#334155}
     .toggle-link a{color:#f59e0b;font-weight:700;text-decoration:none;cursor:pointer;margin-right:6px}
+    
+    /* إشعار بيانات محفوظة */
+    .saved-data-notice{background:#f0fdf4;border:2px solid #10b981;border-radius:14px;padding:10px;margin-bottom:18px;text-align:center;font-size:13px;color:#065f46;display:none}
+    .saved-data-notice i{color:#10b981;margin-left:5px}
+    .clear-saved-btn{background:#fee2e2;color:#dc2626;border:none;padding:6px 12px;border-radius:20px;font-size:11px;cursor:pointer;margin-top:5px;font-weight:600}
+    .clear-saved-btn:hover{background:#fecaca}
 
     /* صفحة التفعيل */
     .verify-card{text-align:center}
@@ -79,6 +85,13 @@
     <div class="header-icon"><i class="fas fa-crown"></i></div>
     <h2>تسجيل الدخول</h2>
     <div class="sub">أهلاً بعودتك</div>
+    
+    <!-- إشعار البيانات المحفوظة -->
+    <div class="saved-data-notice" id="savedDataNotice">
+      <i class="fas fa-check-circle"></i> بياناتك محفوظة من آخر تسجيل دخول
+      <br><button class="clear-saved-btn" onclick="clearSavedData()"><i class="fas fa-trash"></i> مسح البيانات المحفوظة</button>
+    </div>
+    
     <div class="form-group"><label><i class="fas fa-envelope"></i> البريد</label><input type="email" id="loginEmail" placeholder="example@mail.com"><div class="error-msg" id="loginEmailError"></div></div>
     <div class="form-group"><label><i class="fas fa-lock"></i> كلمة المرور</label><input type="password" id="loginPassword" placeholder="••••••••"><div class="error-msg" id="loginPasswordError"></div></div>
     <button class="btn" id="loginBtn"><i class="fas fa-sign-in-alt"></i> دخول</button>
@@ -147,9 +160,50 @@ const app=initializeApp(fc),auth=getAuth(app),db=getFirestore(app);
 
 let selectedEmoji='😎',friendData=null,friendUid=null,isFriendValid=false;
 let currentCode='',codeTimer=null,isCodeVerified=false,codeExpired=false;
-let pendingUserData=null; // بيانات المستخدم المؤقتة
+let pendingUserData=null;
 
 const DEFAULT_SETTINGS={registration_open:true,min_email_len:5,min_pass_len:6,banned_passwords:[],default_money:1000,default_gold:10,default_elixir:10,default_oil:10,default_ddo:0};
+
+// ========== نظام حفظ واسترجاع بيانات الدخول ==========
+const SAVED_LOGIN_KEY = 'savedLoginData';
+
+function saveLoginData(email, password) {
+  var data = {
+    email: email,
+    password: password,
+    savedAt: Date.now()
+  };
+  localStorage.setItem(SAVED_LOGIN_KEY, JSON.stringify(data));
+}
+
+function loadSavedLoginData() {
+  try {
+    var saved = localStorage.getItem(SAVED_LOGIN_KEY);
+    if (saved) {
+      var data = JSON.parse(saved);
+      if (data.email && data.password) {
+        document.getElementById('loginEmail').value = data.email;
+        document.getElementById('loginPassword').value = data.password;
+        document.getElementById('savedDataNotice').style.display = 'block';
+        return true;
+      }
+    }
+  } catch(e) {
+    console.log('لا توجد بيانات محفوظة');
+  }
+  return false;
+}
+
+function clearSavedData() {
+  localStorage.removeItem(SAVED_LOGIN_KEY);
+  document.getElementById('loginEmail').value = '';
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('savedDataNotice').style.display = 'none';
+  toastMsg('🗑️ تم مسح البيانات المحفوظة');
+}
+
+// جعل الدالة متاحة للزر
+window.clearSavedData = clearSavedData;
 
 function toastMsg(m,ok){
   ok=ok!==false;
@@ -175,7 +229,6 @@ function showErr(id,m){
 }
 
 function genId(){return Math.floor(100000+Math.random()*900000).toString()}
-
 function genCode(){return Math.floor(100000+Math.random()*900000).toString()}
 
 async function loadAdminSettings(){
@@ -223,13 +276,11 @@ function showVerifySection(email){
   isCodeVerified=false;
   codeExpired=false;
   
-  // إنشاء رمز جديد
   currentCode=genCode();
   document.getElementById('codeDisplay').textContent=currentCode;
   document.getElementById('codeTimer').textContent='20';
   document.getElementById('codeTimer').style.color='#92400e';
   
-  // مسح الحقول
   for(var i=1;i<=6;i++){
     var input=document.getElementById('c'+i);
     input.value='';
@@ -238,37 +289,27 @@ function showVerifySection(email){
   }
   document.getElementById('c1').focus();
   
-  // تعطيل زر إعادة الإرسال
   document.getElementById('resendBtn').disabled=true;
   
-  // بدء المؤقت
   var timeLeft=20;
   if(codeTimer)clearInterval(codeTimer);
   codeTimer=setInterval(function(){
     timeLeft--;
     document.getElementById('codeTimer').textContent=timeLeft;
-    if(timeLeft<=5){
-      document.getElementById('codeTimer').style.color='#ef4444';
-    }
+    if(timeLeft<=5)document.getElementById('codeTimer').style.color='#ef4444';
     if(timeLeft<=0){
       clearInterval(codeTimer);
       document.getElementById('codeDisplay').textContent='------';
       codeExpired=true;
       currentCode='';
       document.getElementById('resendBtn').disabled=false;
-      // تعطيل حقول الإدخال
-      for(var j=1;j<=6;j++){
-        document.getElementById('c'+j).disabled=true;
-      }
+      for(var j=1;j<=6;j++){document.getElementById('c'+j).disabled=true}
       document.getElementById('verifyBtn').disabled=true;
       toastMsg('⌛ انتهت صلاحية الرمز، الرجاء طلب رمز جديد',false);
     }
   },1000);
   
-  // تمكين زر إعادة الإرسال بعد 10 ثواني
-  setTimeout(function(){
-    document.getElementById('resendBtn').disabled=false;
-  },10000);
+  setTimeout(function(){document.getElementById('resendBtn').disabled=false},10000);
 }
 
 window.resendCode=function(){
@@ -280,13 +321,11 @@ window.resendCode=function(){
 };
 
 window.moveNext=function(curr,nextId){
-  // السماح فقط بالأرقام
   curr.value=curr.value.replace(/[^0-9]/g,'');
   if(curr.value.length===1){
     var n=document.getElementById(nextId);
     if(n&&!n.disabled){n.focus()}
   }
-  // التحقق الفوري عند اكتمال جميع الخانات
   setTimeout(checkVerifyCode,50);
 };
 
@@ -297,37 +336,27 @@ window.checkVerifyCode=function(){
     entered+=input.value;
   }
   
-  // التحقق فقط عند اكتمال 6 أرقام
   if(entered.length===6){
     if(entered===currentCode && !codeExpired && currentCode!==''){
       isCodeVerified=true;
       document.getElementById('verifyError').style.display='none';
       document.getElementById('verifyBtn').disabled=false;
-      for(var j=1;j<=6;j++){
-        document.getElementById('c'+j).style.borderColor='#10b981';
-      }
-      // إيقاف المؤقت عند التحقق الناجح
+      for(var j=1;j<=6;j++){document.getElementById('c'+j).style.borderColor='#10b981'}
       if(codeTimer)clearInterval(codeTimer);
     } else {
       isCodeVerified=false;
       document.getElementById('verifyError').textContent='❌ الرمز غير صحيح';
       document.getElementById('verifyError').style.display='block';
       document.getElementById('verifyBtn').disabled=true;
-      for(var k=1;k<=6;k++){
-        document.getElementById('c'+k).style.borderColor='#ef4444';
-      }
+      for(var k=1;k<=6;k++){document.getElementById('c'+k).style.borderColor='#ef4444'}
     }
   } else {
-    // لم يكتمل الإدخال بعد
     document.getElementById('verifyBtn').disabled=true;
   }
 };
 
 window.confirmVerification=async function(){
-  if(!isCodeVerified||!pendingUserData){
-    toastMsg('الرجاء إدخال الرمز الصحيح أولاً',false);
-    return;
-  }
+  if(!isCodeVerified||!pendingUserData)return;
   clearInterval(codeTimer);
   await completeRegistration();
 };
@@ -339,9 +368,14 @@ async function handleLogin(){
   var pass=document.getElementById('loginPassword').value;
   if(!email){showErr('loginEmail','البريد مطلوب');return}
   if(!pass){showErr('loginPassword','كلمة المرور مطلوبة');return}
+  
   showL(true);
   try{
     var cred=await signInWithEmailAndPassword(auth,email,pass);
+    
+    // ✅ حفظ بيانات الدخول بعد تسجيل الدخول الناجح
+    saveLoginData(email, pass);
+    
     try{
       var ud=await getDoc(doc(db,"users",cred.user.uid));
       var rd=await getDoc(doc(db,"resources",cred.user.uid));
@@ -391,10 +425,7 @@ async function handleRegister(){
     ddo:settings.default_ddo||0
   };
   
-  // حفظ البيانات مؤقتاً
   pendingUserData={name:name,email:email,pass:pass,userId:userId,emoji:selectedEmoji,defRes:defRes,settings:settings};
-  
-  // الانتقال لصفحة التفعيل
   showVerifySection(email);
 }
 
@@ -404,6 +435,10 @@ async function completeRegistration(){
   showL(true);
   try{
     var cred=await createUserWithEmailAndPassword(auth,d.email,d.pass);
+    
+    // ✅ حفظ بيانات الدخول بعد التسجيل الناجح
+    saveLoginData(d.email, d.pass);
+    
     var ud={
       uid:cred.user.uid,
       email:d.email,
@@ -431,9 +466,7 @@ async function completeRegistration(){
       try{
         await setDoc(doc(db,"users",cred.user.uid),ud);
         await setDoc(doc(db,"resources",cred.user.uid),d.defRes);
-      }catch(e2){
-        console.error('خطأ في حفظ البيانات:',e2);
-      }
+      }catch(e2){console.error('خطأ في حفظ البيانات:',e2)}
     }
     
     renderSuccess(ud,d.defRes,true);
@@ -448,7 +481,7 @@ async function completeRegistration(){
 }
 
 function renderSuccess(ud,res,isNew){
-  document.getElementById('appContainer').innerHTML='<div class="success-box"><i class="fas fa-check-circle"></i><h2>'+(isNew?'تم التسجيل!':'مرحباً بعودتك')+'</h2><p>'+(ud.username||'مستخدم')+'</p><div style="background:#f8fafc;border-radius:32px;padding:24px;margin-top:16px"><div style="font-size:64px">'+(ud.emoji||'😎')+'</div><div class="user-badge"><div class="id-big">#'+ud.userId+'</div></div>'+(ud.friendId?'<div style="background:#f0fdf4;border-radius:16px;padding:10px;margin:8px 0"><i class="fas fa-user-friends"></i> مسجل عبر الصديق: #'+ud.friendId+'</div>':'')+'<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px"><div style="background:#d1fae5;padding:10px;border-radius:14px"><i class="fas fa-coins"></i><strong>'+(res.money||0).toLocaleString()+'</strong><br><small>مال</small></div><div style="background:#fef3c7;padding:10px;border-radius:14px"><i class="fas fa-gem"></i><strong>'+(res.gold||0).toLocaleString()+'</strong><br><small>ذهب</small></div><div style="background:#ede9fe;padding:10px;border-radius:14px"><i class="fas fa-flask"></i><strong>'+(res.elixir||0).toLocaleString()+'</strong><br><small>إكسير</small></div><div style="background:#cffafe;padding:10px;border-radius:14px"><i class="fas fa-oil-can"></i><strong>'+(res.oil||0).toLocaleString()+'</strong><br><small>نفط</small></div>'+(res.ddo>0?'<div style="background:#fce7f3;padding:10px;border-radius:14px;grid-column:span 2"><i class="fas fa-gem"></i><strong>'+(res.ddo||0).toLocaleString()+'</strong><br><small>DDO</small></div>':'')+'</div></div><button class="btn" style="margin-top:28px" onclick="window.location.href=\'https://amanhsn55555-eng.github.io/Mnstty-tody/\'">📱 الذهاب إلى المنصة</button></div>';
+  document.getElementById('appContainer').innerHTML='<div class="success-box"><i class="fas fa-check-circle"></i><h2>'+(isNew?'تم التسجيل!':'مرحباً بعودتك')+'</h2><p>'+(ud.username||'مستخدم')+'</p><div style="background:#f8fafc;border-radius:32px;padding:24px;margin-top:16px"><div style="font-size:64px">'+(ud.emoji||'😎')+'</div><div class="user-badge"><div class="id-big">#'+ud.userId+'</div></div>'+(ud.friendId?'<div style="background:#f0fdf4;border-radius:16px;padding:10px;margin:8px 0"><i class="fas fa-user-friends"></i> مسجل عبر الصديق: #'+ud.friendId+'</div>':'')+'<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px"><div style="background:#d1fae5;padding:10px;border-radius:14px"><i class="fas fa-coins"></i><strong>'+(res.money||0).toLocaleString()+'</strong><br><small>مال</small></div><div style="background:#fef3c7;padding:10px;border-radius:14px"><i class="fas fa-gem"></i><strong>'+(res.gold||0).toLocaleString()+'</strong><br><small>ذهب</small></div><div style="background:#ede9fe;padding:10px;border-radius:14px"><i class="fas fa-flask"></i><strong>'+(res.elixir||0).toLocaleString()+'</strong><br><small>إكسير</small></div><div style="background:#cffafe;padding:10px;border-radius:14px"><i class="fas fa-oil-can"></i><strong>'+(res.oil||0).toLocaleString()+'</strong><br><small>نفط</small></div>'+(res.ddo>0?'<div style="background:#fce7f3;padding:10px;border-radius:14px;grid-column:span 2"><i class="fas fa-gem"></i><strong>'+(res.ddo||0).toLocaleString()+'</strong><br><small>DDO</small></div>':'')+'</div></div><button class="btn" style="margin-top:28px" onclick="window.location.href=\'https://amanhsn55555-eng.github.io/Mnstty-tody/?v='+Date.now()+'\'">📱 الذهاب إلى المنصة</button><p style="text-align:center;margin-top:15px;color:#64748b;font-size:12px;">إذا لم تفتح المنصة، <a href="https://amanhsn55555-eng.github.io/Mnstty-tody/?v='+Date.now()+'" style="color:#f59e0b;">اضغط هنا</a></p></div>';
 }
 
 // ========== الأحداث ==========
@@ -471,6 +504,8 @@ document.getElementById('showLoginLink').addEventListener('click',function(e){
   document.getElementById('verifySection').style.display='none';
   document.getElementById('loginSection').style.display='block';
   clearErrors();
+  // إعادة تحميل البيانات المحفوظة عند العودة لصفحة الدخول
+  loadSavedLoginData();
 });
 
 document.querySelectorAll('.emoji-pick').forEach(function(el){
@@ -483,6 +518,8 @@ document.querySelectorAll('.emoji-pick').forEach(function(el){
 
 window.addEventListener('load',function(){
   document.getElementById('randomIdPreview').textContent=genId();
+  // تحميل البيانات المحفوظة عند فتح الصفحة
+  loadSavedLoginData();
 });
 
 document.getElementById('loginPassword').addEventListener('keypress',function(e){
