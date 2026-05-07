@@ -2,234 +2,73 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>تسجيل الدخول · منصتي</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', 'Tajawal', sans-serif;
-    }
-    body {
-      background: linear-gradient(145deg, #0b1120, #19233c);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-    .auth-card {
-      background: rgba(255, 255, 255, 0.97);
-      width: 100%;
-      max-width: 420px;
-      border-radius: 28px;
-      padding: 30px 22px;
-      box-shadow: 0 25px 45px rgba(0, 0, 0, 0.35);
-      border: 3px solid transparent;
-      background: linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)) padding-box,
-                  linear-gradient(135deg, #fbbf24, #ec4899, #8b5cf6, #06b6d4, #fbbf24) border-box;
-      box-shadow: -15px 15px 30px rgba(0, 0, 0, 0.3), -5px 5px 15px rgba(251, 191, 36, 0.2), inset 0 0 30px rgba(255, 255, 255, 0.3);
-      animation: rotate3d 8s ease-in-out infinite;
-    }
-    @keyframes rotate3d {
-      0%, 100% { transform: perspective(1000px) rotateY(-5deg) rotateX(2deg); }
-      50% { transform: perspective(1000px) rotateY(5deg) rotateX(-2deg); }
-    }
-    .header-icon { text-align: center; margin-bottom: 20px; }
-    .header-icon i { font-size: 45px; color: #fbbf24; }
-    h2 { color: #0f172a; font-size: 26px; font-weight: 800; text-align: center; margin-bottom: 6px; }
-    .sub { text-align: center; color: #64748b; margin-bottom: 28px; font-size: 14px; }
-    .form-group { margin-bottom: 18px; }
-    label { display: block; margin-bottom: 6px; font-weight: 600; color: #1e293b; font-size: 14px; }
-    label i { margin-left: 6px; color: #fbbf24; }
-    input {
-      width: 100%;
-      padding: 14px 16px;
-      border: 2px solid #e2e8f0;
-      border-radius: 16px;
-      font-size: 15px;
-      background: #fafcff;
-      transition: 0.2s;
-      text-align: right;
-    }
-    input:focus { border-color: #fbbf24; outline: none; background: #fff; }
-    .error-msg { color: #ef4444; font-size: 12px; margin-top: 5px; display: none; }
-    .btn {
-      width: 100%;
-      padding: 16px;
-      background: linear-gradient(135deg, #fbbf24, #f59e0b);
-      border: none;
-      border-radius: 24px;
-      font-size: 18px;
-      font-weight: bold;
-      color: #0f172a;
-      cursor: pointer;
-      margin-top: 8px;
-      transition: 0.2s;
-    }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-    .btn:active:not(:disabled) { transform: scale(0.97); }
-    .toggle-link {
-      text-align: center;
-      margin-top: 24px;
-      padding-top: 18px;
-      border-top: 1px solid #e2e8f0;
-      color: #334155;
-    }
-    .toggle-link a {
-      color: #f59e0b;
-      font-weight: 700;
-      text-decoration: none;
-      cursor: pointer;
-      margin-right: 6px;
-    }
-    .verify-card { text-align: center; }
-    .verify-card .email-display {
-      background: #f1f5f9;
-      border-radius: 16px;
-      padding: 12px;
-      margin: 16px 0;
-      font-size: 14px;
-      color: #64748b;
-    }
-    .verify-card .email-display strong { color: #0f172a; font-size: 16px; }
-    .code-display-box {
-      background: linear-gradient(145deg, #fef3c7, #fde68a);
-      border-radius: 20px;
-      padding: 20px;
-      margin: 16px 0;
-    }
-    .code-display-box .big-code {
-      font-size: 44px;
-      font-weight: 900;
-      letter-spacing: 6px;
-      color: #0f172a;
-    }
-    .code-display-box .timer-text { color: #92400e; font-size: 13px; margin-top: 8px; }
-    .code-inputs { display: flex; gap: 6px; justify-content: center; margin: 16px 0; flex-wrap: wrap; }
-    .code-inputs input {
-      width: 42px;
-      height: 50px;
-      text-align: center;
-      font-size: 22px;
-      font-weight: 800;
-      border-radius: 12px;
-      padding: 0;
-    }
-    .resend-btn {
-      background: none;
-      border: 2px solid #fbbf24;
-      color: #b45309;
-      padding: 10px 20px;
-      border-radius: 24px;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 13px;
-      margin-top: 8px;
-      transition: 0.2s;
-    }
-    .resend-btn:hover { background: #fef3c7; }
-    .resend-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .friend-preview {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #f0fdf4;
-      border-radius: 14px;
-      padding: 10px;
-      margin: 8px 0;
-      border: 2px solid #10b981;
-    }
-    .friend-preview .fp-avatar {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      overflow: hidden;
-      border: 2px solid #10b981;
-      background: #d1fae5;
-    }
-    .friend-preview .fp-avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .friend-notfound {
-      background: #fee2e2;
-      border-radius: 14px;
-      padding: 10px;
-      margin: 8px 0;
-      border: 2px solid #ef4444;
-      color: #991b1b;
-      font-size: 13px;
-      text-align: center;
-    }
-    .emoji-picker { display: flex; gap: 10px; margin: 15px 0; flex-wrap: wrap; }
-    .emoji-pick {
-      font-size: 30px;
-      background: #f8fafc;
-      padding: 6px 12px;
-      border-radius: 18px;
-      cursor: pointer;
-      border: 2px solid transparent;
-    }
-    .emoji-pick.selected { border-color: #fbbf24; background: #fef3c7; }
-    .id-preview {
-      background: #f1f5f9;
-      border-radius: 16px;
-      padding: 12px;
-      text-align: center;
-      margin: 16px 0;
-    }
-    .id-preview strong { font-size: 22px; letter-spacing: 2px; }
-    .loading {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(4px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-    }
-    .loading.show { display: flex; }
-    .spinner {
-      background: #fff;
-      padding: 28px 32px;
-      border-radius: 32px;
-      text-align: center;
-    }
-    .spinner i { font-size: 40px; color: #fbbf24; animation: spin 1s linear infinite; }
-    @keyframes spin { 0% { transform: rotate(0); } 100% { transform: rotate(360deg); } }
-    .toast {
-      position: fixed;
-      bottom: 24px;
-      left: 20px;
-      right: 20px;
-      background: #1e293b;
-      color: #fff;
-      padding: 14px 20px;
-      border-radius: 40px;
-      text-align: center;
-      font-weight: 600;
-      z-index: 1000;
-      opacity: 0;
-      transition: 0.25s;
-      pointer-events: none;
-      max-width: 400px;
-      margin: 0 auto;
-    }
-    .toast.show { opacity: 1; bottom: 36px; }
-    .success-box { text-align: center; }
-    .success-box i { font-size: 56px; color: #10b981; margin-bottom: 16px; }
-    .user-badge {
-      background: #fef3c7;
-      border-radius: 24px;
-      padding: 20px;
-      margin: 24px 0;
-    }
-    .id-big { font-size: 34px; font-weight: 800; color: #0f172a; }
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI','Tajawal',sans-serif}
+    body{background:linear-gradient(145deg,#0b1120,#19233c);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+    
+    .auth-card{background:rgba(255,255,255,.97);width:100%;max-width:420px;border-radius:28px;padding:30px 22px;box-shadow:0 25px 45px rgba(0,0,0,.35);border:3px solid transparent;background:linear-gradient(rgba(255,255,255,.95),rgba(255,255,255,.95)) padding-box,linear-gradient(135deg,#fbbf24,#ec4899,#8b5cf6,#06b6d4,#fbbf24) border-box;box-shadow:-15px 15px 30px rgba(0,0,0,.3),-5px 5px 15px rgba(251,191,36,.2),inset 0 0 30px rgba(255,255,255,.3);animation:rotate3d 8s ease-in-out infinite}
+    @keyframes rotate3d{0%,100%{transform:perspective(1000px) rotateY(-5deg) rotateX(2deg)}50%{transform:perspective(1000px) rotateY(5deg) rotateX(-2deg)}}
+    
+    .header-icon{text-align:center;margin-bottom:20px}
+    .header-icon i{font-size:45px;color:#fbbf24}
+    h2{color:#0f172a;font-size:26px;font-weight:800;text-align:center;margin-bottom:6px}
+    .sub{text-align:center;color:#64748b;margin-bottom:28px;font-size:14px}
+    
+    .form-group{margin-bottom:18px}
+    label{display:block;margin-bottom:6px;font-weight:600;color:#1e293b;font-size:14px}
+    label i{margin-left:6px;color:#fbbf24}
+    input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:16px;font-size:15px;background:#fafcff;transition:.2s;text-align:right}
+    input:focus{border-color:#fbbf24;outline:none;background:#fff}
+    .error-msg{color:#ef4444;font-size:12px;margin-top:5px;display:none}
+    
+    .btn{width:100%;padding:16px;background:linear-gradient(135deg,#fbbf24,#f59e0b);border:none;border-radius:24px;font-size:18px;font-weight:bold;color:#0f172a;cursor:pointer}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+    
+    .toggle-link{text-align:center;margin-top:24px;padding-top:18px;border-top:1px solid #e2e8f0;color:#334155}
+    .toggle-link a{color:#f59e0b;font-weight:700;text-decoration:none;cursor:pointer;margin-right:6px}
+
+    /* صفحة التفعيل */
+    .verify-card{text-align:center}
+    .verify-card .email-display{background:#f1f5f9;border-radius:16px;padding:12px;margin:16px 0;font-size:14px;color:#64748b}
+    .verify-card .email-display strong{color:#0f172a;font-size:16px}
+    
+    .code-display-box{background:linear-gradient(145deg,#fef3c7,#fde68a);border-radius:20px;padding:20px;margin:16px 0}
+    .code-display-box .big-code{font-size:44px;font-weight:900;letter-spacing:6px;color:#0f172a}
+    .code-display-box .timer-text{color:#92400e;font-size:13px;margin-top:8px}
+    
+    .code-inputs{display:flex;gap:6px;justify-content:center;margin:16px 0}
+    .code-inputs input{width:42px;height:50px;text-align:center;font-size:22px;font-weight:800;border-radius:12px;padding:0}
+    
+    .resend-btn{background:none;border:2px solid #fbbf24;color:#b45309;padding:10px 20px;border-radius:24px;font-weight:700;cursor:pointer;font-size:13px;margin-top:8px;transition:.2s}
+    .resend-btn:hover{background:#fef3c7}
+    .resend-btn:disabled{opacity:.5;cursor:not-allowed}
+    
+    .friend-preview{display:flex;align-items:center;gap:10px;background:#f0fdf4;border-radius:14px;padding:10px;margin:8px 0;border:2px solid #10b981}
+    .friend-preview .fp-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;overflow:hidden;border:2px solid #10b981;background:#d1fae5}
+    .friend-preview .fp-avatar img{width:100%;height:100%;object-fit:cover}
+    .friend-notfound{background:#fee2e2;border-radius:14px;padding:10px;margin:8px 0;border:2px solid #ef4444;color:#991b1b;font-size:13px;text-align:center}
+    
+    .emoji-picker{display:flex;gap:10px;margin:15px 0}
+    .emoji-pick{font-size:30px;background:#f8fafc;padding:6px 12px;border-radius:18px;cursor:pointer;border:2px solid transparent}
+    .emoji-pick.selected{border-color:#fbbf24;background:#fef3c7}
+    .id-preview{background:#f1f5f9;border-radius:16px;padding:12px;text-align:center;margin:16px 0}
+    .id-preview strong{font-size:22px;letter-spacing:2px}
+    
+    .loading{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:999}
+    .loading.show{display:flex}
+    .spinner{background:#fff;padding:28px 32px;border-radius:32px;text-align:center}
+    .spinner i{font-size:40px;color:#fbbf24;animation:spin 1s linear infinite}
+    @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+    
+    .toast{position:fixed;bottom:24px;left:20px;right:20px;background:#1e293b;color:#fff;padding:14px 20px;border-radius:40px;text-align:center;font-weight:600;z-index:1000;opacity:0;transition:.25s;pointer-events:none;max-width:400px;margin:0 auto}
+    .toast.show{opacity:1;bottom:36px}
+    .success-box{text-align:center}
+    .success-box i{font-size:56px;color:#10b981;margin-bottom:16px}
+    .user-badge{background:#fef3c7;border-radius:24px;padding:20px;margin:24px 0}
+    .id-big{font-size:34px;font-weight:800;color:#0f172a}
   </style>
 </head>
 <body>
@@ -240,68 +79,31 @@
     <div class="header-icon"><i class="fas fa-crown"></i></div>
     <h2>تسجيل الدخول</h2>
     <div class="sub">أهلاً بعودتك</div>
-    <div class="form-group">
-      <label><i class="fas fa-envelope"></i> البريد</label>
-      <input type="email" id="loginEmail" placeholder="example@mail.com" autocomplete="email">
-      <div class="error-msg" id="loginEmailError"></div>
-    </div>
-    <div class="form-group">
-      <label><i class="fas fa-lock"></i> كلمة المرور</label>
-      <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
-      <div class="error-msg" id="loginPasswordError"></div>
-    </div>
+    <div class="form-group"><label><i class="fas fa-envelope"></i> البريد</label><input type="email" id="loginEmail" placeholder="example@mail.com"><div class="error-msg" id="loginEmailError"></div></div>
+    <div class="form-group"><label><i class="fas fa-lock"></i> كلمة المرور</label><input type="password" id="loginPassword" placeholder="••••••••"><div class="error-msg" id="loginPasswordError"></div></div>
     <button class="btn" id="loginBtn"><i class="fas fa-sign-in-alt"></i> دخول</button>
-    <div class="toggle-link"><span>جديد هنا؟</span> <a id="showRegisterLink">إنشاء حساب</a></div>
+    <div class="toggle-link"><span>جديد هنا؟</span><a id="showRegisterLink">إنشاء حساب</a></div>
   </div>
 
   <!-- نموذج التسجيل -->
   <div id="registerSection" style="display:none">
     <div class="header-icon"><i class="fas fa-user-plus"></i></div>
     <h2>حساب جديد</h2>
-    <div class="sub">الانضمام عبر معرف صديق فقط</div>
+    <div class="sub">انضم إلينا بسهولة</div>
     
-    <div class="form-group">
-      <label><i class="fas fa-user"></i> الاسم</label>
-      <input type="text" id="regName" placeholder="محمد أحمد" autocomplete="name">
-      <div class="error-msg" id="regNameError"></div>
-    </div>
-    <div class="form-group">
-      <label><i class="fas fa-envelope"></i> البريد</label>
-      <input type="email" id="regEmail" placeholder="example@mail.com" autocomplete="email">
-      <div class="error-msg" id="regEmailError"></div>
-    </div>
-    <div class="form-group">
-      <label><i class="fas fa-lock"></i> كلمة المرور</label>
-      <input type="password" id="regPassword" placeholder="أدخل كلمة المرور" autocomplete="new-password">
-      <div class="error-msg" id="regPasswordError"></div>
-    </div>
-    <div class="form-group">
-      <label><i class="fas fa-check"></i> تأكيد المرور</label>
-      <input type="password" id="regConfirm" placeholder="••••••••" autocomplete="new-password">
-      <div class="error-msg" id="regConfirmError"></div>
-    </div>
+    <div class="form-group"><label><i class="fas fa-user"></i> الاسم</label><input type="text" id="regName" placeholder="محمد أحمد"><div class="error-msg" id="regNameError"></div></div>
+    <div class="form-group"><label><i class="fas fa-envelope"></i> البريد</label><input type="email" id="regEmail" placeholder="example@mail.com"><div class="error-msg" id="regEmailError"></div></div>
+    <div class="form-group"><label><i class="fas fa-lock"></i> كلمة المرور</label><input type="password" id="regPassword" placeholder="أدخل كلمة المرور"><div class="error-msg" id="regPasswordError"></div></div>
+    <div class="form-group"><label><i class="fas fa-check"></i> تأكيد المرور</label><input type="password" id="regConfirm" placeholder="••••••••"><div class="error-msg" id="regConfirmError"></div></div>
     
-    <div class="form-group">
-      <label><i class="fas fa-user-friends"></i> معرف الصديق <span style="color:#ef4444">*</span></label>
-      <input type="text" id="friendId" placeholder="أدخل معرف صديقك (إجباري)" oninput="checkFriendId()" autocomplete="off">
-      <div class="error-msg" id="friendIdError"></div>
-      <div id="friendPreview" style="display:none"></div>
-    </div>
+    <div class="form-group"><label><i class="fas fa-user-friends"></i> معرف الصديق <span style="color:#ef4444">*</span></label><input type="text" id="friendId" placeholder="أدخل معرف صديقك (إجباري)" oninput="checkFriendId()"><div class="error-msg" id="friendIdError"></div><div id="friendPreview" style="display:none"></div></div>
     
     <div class="id-preview"><span>معرفك: </span><strong id="randomIdPreview">------</strong></div>
     
-    <div>
-      <label><i class="fas fa-smile"></i> اختر إيموجي</label>
-      <div class="emoji-picker">
-        <span class="emoji-pick selected" data-emoji="😎">😎</span>
-        <span class="emoji-pick" data-emoji="👑">👑</span>
-        <span class="emoji-pick" data-emoji="🐼">🐼</span>
-        <span class="emoji-pick" data-emoji="🌟">🌟</span>
-      </div>
-    </div>
+    <div><label><i class="fas fa-smile"></i> اختر إيموجي</label><div class="emoji-picker"><span class="emoji-pick selected" data-emoji="😎">😎</span><span class="emoji-pick" data-emoji="👑">👑</span><span class="emoji-pick" data-emoji="🐼">🐼</span><span class="emoji-pick" data-emoji="🌟">🌟</span></div></div>
     
     <button class="btn" id="registerBtn" disabled><i class="fas fa-user-check"></i> إنشاء الحساب</button>
-    <div class="toggle-link"><span>لديك حساب؟</span> <a id="showLoginLink">تسجيل الدخول</a></div>
+    <div class="toggle-link"><span>لديك حساب؟</span><a id="showLoginLink">تسجيل الدخول</a></div>
   </div>
 
   <!-- صفحة التفعيل -->
@@ -313,16 +115,16 @@
       
       <div class="code-display-box">
         <div class="big-code" id="codeDisplay">------</div>
-        <div class="timer-text">⏳ الرمز صالح لمدة <span id="codeTimer">10</span> ثواني</div>
+        <div class="timer-text">⏳ الرمز صالح لمدة <span id="codeTimer">20</span> ثانية</div>
       </div>
       
       <div class="code-inputs">
-        <input type="text" id="c1" maxlength="1" oninput="moveNext(this,'c2')" inputmode="numeric">
-        <input type="text" id="c2" maxlength="1" oninput="moveNext(this,'c3')" inputmode="numeric">
-        <input type="text" id="c3" maxlength="1" oninput="moveNext(this,'c4')" inputmode="numeric">
-        <input type="text" id="c4" maxlength="1" oninput="moveNext(this,'c5')" inputmode="numeric">
-        <input type="text" id="c5" maxlength="1" oninput="moveNext(this,'c6')" inputmode="numeric">
-        <input type="text" id="c6" maxlength="1" oninput="checkVerifyCode()" inputmode="numeric">
+        <input type="text" id="c1" maxlength="1" oninput="moveNext(this,'c2')">
+        <input type="text" id="c2" maxlength="1" oninput="moveNext(this,'c3')">
+        <input type="text" id="c3" maxlength="1" oninput="moveNext(this,'c4')">
+        <input type="text" id="c4" maxlength="1" oninput="moveNext(this,'c5')">
+        <input type="text" id="c5" maxlength="1" oninput="moveNext(this,'c6')">
+        <input type="text" id="c6" maxlength="1" oninput="checkVerifyCode()">
       </div>
       <div class="error-msg" id="verifyError"></div>
       
@@ -332,543 +134,364 @@
   </div>
 </div>
 
-<div class="loading" id="loadingOverlay">
-  <div class="spinner">
-    <i class="fas fa-spinner"></i>
-    <p style="margin-top:14px;color:#0f172a">جاري المعالجة...</p>
-  </div>
-</div>
+<div class="loading" id="loadingOverlay"><div class="spinner"><i class="fas fa-spinner"></i><p style="margin-top:14px;color:#0f172a">جاري المعالجة...</p></div></div>
 <div class="toast" id="toastMsg"></div>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
-  import { 
-    getAuth, 
-    signInWithEmailAndPassword, 
-    createUserWithEmailAndPassword 
-  } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
-  import { 
-    getFirestore, 
-    doc, 
-    setDoc, 
-    getDoc, 
-    getDocs, 
-    query, 
-    collection, 
-    where 
-  } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, getDocs, query, collection, where } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCPBrZMo6IYCwCDYV3HEfNcUmLUITR6VRc",
-    authDomain: "elahbes.firebaseapp.com",
-    projectId: "elahbes",
-    storageBucket: "elahbes.firebasestorage.app",
-    messagingSenderId: "800207969145",
-    appId: "1:800207969145:web:aa19b725d1c92dd48fada8",
-    measurementId: "G-EFT566SJMP"
-  };
+const fc={apiKey:"AIzaSyCPBrZMo6IYCwCDYV3HEfNcUmLUITR6VRc",authDomain:"elahbes.firebaseapp.com",projectId:"elahbes",storageBucket:"elahbes.firebasestorage.app",messagingSenderId:"800207969145",appId:"1:800207969145:web:aa19b725d1c92dd48fada8",measurementId:"G-EFT566SJMP"};
+const app=initializeApp(fc),auth=getAuth(app),db=getFirestore(app);
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+let selectedEmoji='😎',friendData=null,friendUid=null,isFriendValid=false;
+let currentCode='',codeTimer=null,isCodeVerified=false,codeExpired=false;
+let pendingUserData=null; // بيانات المستخدم المؤقتة
 
-  // ========== الموارد الإجبارية الثابتة لكل حساب جديد ==========
-  const MANDATORY_RESOURCES = {
-    money: 0,    // TMR
-    gold: 1,     // ذهب
-    elixir: 1,   // إكسير
-    oil: 0,      // نفط
-    ddo: 0       // DDO
-  };
+const DEFAULT_SETTINGS={registration_open:true,min_email_len:5,min_pass_len:6,banned_passwords:[],default_money:1000,default_gold:10,default_elixir:10,default_oil:10,default_ddo:0};
 
-  let selectedEmoji = '😎';
-  let friendData = null;
-  let friendUid = null;
-  let isFriendValid = false;
+function toastMsg(m,ok){
+  ok=ok!==false;
+  var t=document.getElementById('toastMsg');
+  t.textContent=m;
+  t.style.background=ok?'#10b981':'#ef4444';
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show')},3000);
+}
+
+function showL(s){document.getElementById('loadingOverlay').classList.toggle('show',s)}
+
+function clearErrors(){
+  document.querySelectorAll('.error-msg').forEach(function(e){e.style.display='none';e.textContent=''});
+  document.querySelectorAll('input').forEach(function(i){i.style.borderColor='#e2e8f0'});
+}
+
+function showErr(id,m){
+  var f=document.getElementById(id);
+  var e=document.getElementById(id+'Error');
+  if(f)f.style.borderColor='#ef4444';
+  if(e){e.textContent=m;e.style.display='block'}
+}
+
+function genId(){return Math.floor(100000+Math.random()*900000).toString()}
+
+function genCode(){return Math.floor(100000+Math.random()*900000).toString()}
+
+async function loadAdminSettings(){
+  var s={};
+  for(var k in DEFAULT_SETTINGS){
+    try{
+      var snap=await getDoc(doc(db,"admin_settings",k));
+      s[k]=snap.exists()?snap.data().value:DEFAULT_SETTINGS[k];
+    }catch(e){s[k]=DEFAULT_SETTINGS[k]}
+  }
+  return s;
+}
+
+// ========== معرف الصديق ==========
+window.checkFriendId=async function(){
+  var val=document.getElementById('friendId').value.trim();
+  var preview=document.getElementById('friendPreview');
+  if(!val){preview.style.display='none';friendData=null;friendUid=null;isFriendValid=false;updateRegBtn();return}
   
-  let currentCode = '';
-  let codeTimer = null;
-  let isCodeVerified = false;
-  let codeExpired = false;
-  let pendingUserData = null;
-
-  // ========== دوال مساعدة ==========
-  function toastMsg(message, isSuccess = true) {
-    const toast = document.getElementById('toastMsg');
-    toast.textContent = message;
-    toast.style.background = isSuccess ? '#10b981' : '#ef4444';
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 3000);
+  var q=await getDocs(query(collection(db,"users"),where("userId","==",val)));
+  if(q.empty){
+    preview.style.display='block';
+    preview.innerHTML='<div class="friend-notfound">❌ المعرف غير موجود</div>';
+    friendData=null;friendUid=null;isFriendValid=false;updateRegBtn();return;
   }
+  
+  var u=q.docs[0].data();friendUid=q.docs[0].id;friendData=u;isFriendValid=true;
+  var av=u.avatarType==='image'&&u.avatarUrl?'<img src="'+u.avatarUrl+'">':(u.emoji||'👤');
+  preview.style.display='block';
+  preview.innerHTML='<div class="friend-preview"><div class="fp-avatar">'+av+'</div><div><strong>'+(u.username||'مستخدم')+'</strong><br><small>#'+(u.userId||val)+'</small></div></div>';
+  updateRegBtn();
+};
 
-  function showLoading(show) {
-    document.getElementById('loadingOverlay').classList.toggle('show', show);
+function updateRegBtn(){
+  document.getElementById('registerBtn').disabled=!isFriendValid;
+}
+
+// ========== التفعيل ==========
+function showVerifySection(email){
+  document.getElementById('registerSection').style.display='none';
+  document.getElementById('verifySection').style.display='block';
+  document.getElementById('verifyEmail').textContent=email;
+  document.getElementById('verifyBtn').disabled=true;
+  document.getElementById('verifyError').style.display='none';
+  isCodeVerified=false;
+  codeExpired=false;
+  
+  // إنشاء رمز جديد
+  currentCode=genCode();
+  document.getElementById('codeDisplay').textContent=currentCode;
+  document.getElementById('codeTimer').textContent='20';
+  document.getElementById('codeTimer').style.color='#92400e';
+  
+  // مسح الحقول
+  for(var i=1;i<=6;i++){
+    var input=document.getElementById('c'+i);
+    input.value='';
+    input.style.borderColor='#e2e8f0';
+    input.disabled=false;
   }
-
-  function clearAllErrors() {
-    document.querySelectorAll('.error-msg').forEach(e => { e.style.display = 'none'; e.textContent = ''; });
-    document.querySelectorAll('input').forEach(i => i.style.borderColor = '#e2e8f0');
-  }
-
-  function showFieldError(inputId, message) {
-    const input = document.getElementById(inputId);
-    const errorDiv = document.getElementById(inputId + 'Error');
-    if (input) input.style.borderColor = '#ef4444';
-    if (errorDiv) {
-      errorDiv.textContent = message;
-      errorDiv.style.display = 'block';
+  document.getElementById('c1').focus();
+  
+  // تعطيل زر إعادة الإرسال
+  document.getElementById('resendBtn').disabled=true;
+  
+  // بدء المؤقت
+  var timeLeft=20;
+  if(codeTimer)clearInterval(codeTimer);
+  codeTimer=setInterval(function(){
+    timeLeft--;
+    document.getElementById('codeTimer').textContent=timeLeft;
+    if(timeLeft<=5){
+      document.getElementById('codeTimer').style.color='#ef4444';
     }
-  }
-
-  function generateUserId() {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-  }
-
-  function generateVerificationCode() {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-  }
-
-  // ========== التحقق من معرف الصديق ==========
-  window.checkFriendId = async function() {
-    const friendIdInput = document.getElementById('friendId');
-    const previewDiv = document.getElementById('friendPreview');
-    const val = friendIdInput.value.trim();
-    
-    if (!val) {
-      previewDiv.style.display = 'none';
-      friendData = null;
-      friendUid = null;
-      isFriendValid = false;
-      updateRegisterButton();
-      return;
-    }
-    
-    try {
-      const q = await getDocs(query(collection(db, "users"), where("userId", "==", val)));
-      
-      if (q.empty) {
-        previewDiv.style.display = 'block';
-        previewDiv.innerHTML = '<div class="friend-notfound">❌ المعرف غير موجود</div>';
-        friendData = null;
-        friendUid = null;
-        isFriendValid = false;
-        updateRegisterButton();
-        return;
+    if(timeLeft<=0){
+      clearInterval(codeTimer);
+      document.getElementById('codeDisplay').textContent='------';
+      codeExpired=true;
+      currentCode='';
+      document.getElementById('resendBtn').disabled=false;
+      // تعطيل حقول الإدخال
+      for(var j=1;j<=6;j++){
+        document.getElementById('c'+j).disabled=true;
       }
-      
-      const userDoc = q.docs[0];
-      friendUid = userDoc.id;
-      friendData = userDoc.data();
-      isFriendValid = true;
-      
-      const avatarContent = (friendData.avatarType === 'image' && friendData.avatarUrl) 
-        ? `<img src="${friendData.avatarUrl}" alt="avatar">` 
-        : (friendData.emoji || '👤');
-        
-      previewDiv.style.display = 'block';
-      previewDiv.innerHTML = `
-        <div class="friend-preview">
-          <div class="fp-avatar">${avatarContent}</div>
-          <div>
-            <strong>${friendData.username || 'مستخدم'}</strong>
-            <br><small>#${friendData.userId || val}</small>
-          </div>
-        </div>`;
-      
-      updateRegisterButton();
-    } catch (error) {
-      console.error("خطأ في البحث عن الصديق:", error);
-      previewDiv.style.display = 'block';
-      previewDiv.innerHTML = '<div class="friend-notfound">⚠️ حدث خطأ، حاول مجدداً</div>';
-      isFriendValid = false;
-      updateRegisterButton();
+      document.getElementById('verifyBtn').disabled=true;
+      toastMsg('⌛ انتهت صلاحية الرمز، الرجاء طلب رمز جديد',false);
     }
+  },1000);
+  
+  // تمكين زر إعادة الإرسال بعد 10 ثواني
+  setTimeout(function(){
+    document.getElementById('resendBtn').disabled=false;
+  },10000);
+}
+
+window.resendCode=function(){
+  if(codeExpired||!currentCode){
+    var email=document.getElementById('verifyEmail').textContent;
+    showVerifySection(email);
+    toastMsg('📨 تم إرسال رمز جديد');
+  }
+};
+
+window.moveNext=function(curr,nextId){
+  // السماح فقط بالأرقام
+  curr.value=curr.value.replace(/[^0-9]/g,'');
+  if(curr.value.length===1){
+    var n=document.getElementById(nextId);
+    if(n&&!n.disabled){n.focus()}
+  }
+  // التحقق الفوري عند اكتمال جميع الخانات
+  setTimeout(checkVerifyCode,50);
+};
+
+window.checkVerifyCode=function(){
+  var entered='';
+  for(var i=1;i<=6;i++){
+    var input=document.getElementById('c'+i);
+    entered+=input.value;
+  }
+  
+  // التحقق فقط عند اكتمال 6 أرقام
+  if(entered.length===6){
+    if(entered===currentCode && !codeExpired && currentCode!==''){
+      isCodeVerified=true;
+      document.getElementById('verifyError').style.display='none';
+      document.getElementById('verifyBtn').disabled=false;
+      for(var j=1;j<=6;j++){
+        document.getElementById('c'+j).style.borderColor='#10b981';
+      }
+      // إيقاف المؤقت عند التحقق الناجح
+      if(codeTimer)clearInterval(codeTimer);
+    } else {
+      isCodeVerified=false;
+      document.getElementById('verifyError').textContent='❌ الرمز غير صحيح';
+      document.getElementById('verifyError').style.display='block';
+      document.getElementById('verifyBtn').disabled=true;
+      for(var k=1;k<=6;k++){
+        document.getElementById('c'+k).style.borderColor='#ef4444';
+      }
+    }
+  } else {
+    // لم يكتمل الإدخال بعد
+    document.getElementById('verifyBtn').disabled=true;
+  }
+};
+
+window.confirmVerification=async function(){
+  if(!isCodeVerified||!pendingUserData){
+    toastMsg('الرجاء إدخال الرمز الصحيح أولاً',false);
+    return;
+  }
+  clearInterval(codeTimer);
+  await completeRegistration();
+};
+
+// ========== تسجيل الدخول ==========
+async function handleLogin(){
+  clearErrors();
+  var email=document.getElementById('loginEmail').value.trim();
+  var pass=document.getElementById('loginPassword').value;
+  if(!email){showErr('loginEmail','البريد مطلوب');return}
+  if(!pass){showErr('loginPassword','كلمة المرور مطلوبة');return}
+  showL(true);
+  try{
+    var cred=await signInWithEmailAndPassword(auth,email,pass);
+    try{
+      var ud=await getDoc(doc(db,"users",cred.user.uid));
+      var rd=await getDoc(doc(db,"resources",cred.user.uid));
+      renderSuccess(ud.exists()?ud.data():{username:'مستخدم',userId:genId(),emoji:'😎'},rd.exists()?rd.data():{money:0,gold:0,elixir:0,oil:0,ddo:0});
+    }catch(e){
+      renderSuccess({username:'مستخدم',userId:genId(),emoji:'😎'},{money:0,gold:0,elixir:0,oil:0,ddo:0});
+    }
+    toastMsg('✅ تم الدخول بنجاح');
+  }catch(e){
+    var m='بيانات الدخول غير صحيحة';
+    if(e.code==='auth/user-not-found')m='الحساب غير موجود';
+    else if(e.code==='auth/wrong-password')m='كلمة مرور خاطئة';
+    else if(e.code==='auth/invalid-email')m='صيغة البريد غير صحيحة';
+    else if(e.code==='auth/invalid-credential')m='بيانات الدخول غير صحيحة';
+    else if(e.code==='auth/too-many-requests')m='محاولات كثيرة، حاول لاحقاً';
+    toastMsg('❌ '+m,false);
+  }finally{showL(false)}
+}
+
+// ========== تسجيل جديد ==========
+async function handleRegister(){
+  clearErrors();
+  var settings=await loadAdminSettings();
+  if(settings.registration_open===false){toastMsg('🚫 التسجيل مغلق حالياً',false);return}
+  
+  var name=document.getElementById('regName').value.trim();
+  var email=document.getElementById('regEmail').value.trim();
+  var pass=document.getElementById('regPassword').value;
+  var confirm=document.getElementById('regConfirm').value;
+  var valid=true;
+  
+  if(!name||name.length<2){showErr('regName','الاسم مطلوب (حرفين على الأقل)');valid=false}
+  if(!email){showErr('regEmail','البريد مطلوب');valid=false}
+  if(email.length<settings.min_email_len){showErr('regEmail','البريد يجب أن يكون '+settings.min_email_len+' أحرف على الأقل');valid=false}
+  if(!pass||pass.length<settings.min_pass_len){showErr('regPassword','كلمة المرور يجب أن تكون '+settings.min_pass_len+' أحرف على الأقل');valid=false}
+  if(settings.banned_passwords.includes(pass)){showErr('regPassword','كلمة المرور هذه غير مسموحة');valid=false}
+  if(pass!==confirm){showErr('regConfirm','كلمة المرور غير متطابقة');valid=false}
+  if(!isFriendValid||!friendData){showErr('friendId','معرف الصديق إجباري');valid=false}
+  if(!valid)return;
+  
+  var userId=genId();
+  var defRes={
+    money:settings.default_money||1000,
+    gold:settings.default_gold||10,
+    elixir:settings.default_elixir||10,
+    oil:settings.default_oil||10,
+    ddo:settings.default_ddo||0
   };
+  
+  // حفظ البيانات مؤقتاً
+  pendingUserData={name:name,email:email,pass:pass,userId:userId,emoji:selectedEmoji,defRes:defRes,settings:settings};
+  
+  // الانتقال لصفحة التفعيل
+  showVerifySection(email);
+}
 
-  function updateRegisterButton() {
-    document.getElementById('registerBtn').disabled = !isFriendValid;
-  }
-
-  // ========== إدارة التفعيل ==========
-  function showVerificationSection(email) {
-    document.getElementById('registerSection').style.display = 'none';
-    document.getElementById('verifySection').style.display = 'block';
-    document.getElementById('verifyEmail').textContent = email;
-    document.getElementById('verifyBtn').disabled = true;
-    document.getElementById('verifyError').style.display = 'none';
-    
-    isCodeVerified = false;
-    codeExpired = false;
-    
-    currentCode = generateVerificationCode();
-    document.getElementById('codeDisplay').textContent = currentCode;
-    document.getElementById('codeTimer').textContent = '20';
-    document.getElementById('codeTimer').style.color = '#92400e';
-    
-    // تفريغ خانات الإدخال
-    for (let i = 1; i <= 6; i++) {
-      const input = document.getElementById('c' + i);
-      input.value = '';
-      input.style.borderColor = '#e2e8f0';
-    }
-    document.getElementById('c1').focus();
-    
-    document.getElementById('resendBtn').disabled = true;
-    
-    let timeLeft = 20;
-    if (codeTimer) clearInterval(codeTimer);
-    
-    codeTimer = setInterval(() => {
-      timeLeft--;
-      document.getElementById('codeTimer').textContent = timeLeft;
-      
-      if (timeLeft <= 5) {
-        document.getElementById('codeTimer').style.color = '#ef4444';
-      }
-      
-      if (timeLeft <= 0) {
-        clearInterval(codeTimer);
-        document.getElementById('codeDisplay').textContent = '------';
-        codeExpired = true;
-        currentCode = '';
-        document.getElementById('resendBtn').disabled = false;
-        toastMsg('⌛ انتهت صلاحية الرمز', false);
-      }
-    }, 1000);
-    
-    // يمكن إعادة الإرسال بعد 10 ثواني
-    setTimeout(() => {
-      document.getElementById('resendBtn').disabled = false;
-    }, 10000);
-  }
-
-  window.resendCode = function() {
-    if (codeExpired || !currentCode) {
-      const email = document.getElementById('verifyEmail').textContent;
-      showVerificationSection(email);
-      toastMsg('📨 تم إرسال رمز جديد');
-    }
-  };
-
-  window.moveNext = function(currentInput, nextId) {
-    if (currentInput.value.length === 1) {
-      const next = document.getElementById(nextId);
-      if (next) next.focus();
-    }
-    if (document.getElementById('c6').value.length === 1) {
-      checkVerifyCode();
-    }
-  };
-
-  window.checkVerifyCode = function() {
-    let enteredCode = '';
-    for (let i = 1; i <= 6; i++) {
-      enteredCode += document.getElementById('c' + i).value;
-    }
-    
-    if (enteredCode.length === 6) {
-      if (enteredCode === currentCode && !codeExpired) {
-        isCodeVerified = true;
-        document.getElementById('verifyError').style.display = 'none';
-        document.getElementById('verifyBtn').disabled = false;
-        for (let i = 1; i <= 6; i++) {
-          document.getElementById('c' + i).style.borderColor = '#10b981';
-        }
-      } else {
-        isCodeVerified = false;
-        document.getElementById('verifyError').textContent = '❌ الرمز غير صحيح أو منتهي الصلاحية';
-        document.getElementById('verifyError').style.display = 'block';
-        document.getElementById('verifyBtn').disabled = true;
-        for (let i = 1; i <= 6; i++) {
-          document.getElementById('c' + i).style.borderColor = '#ef4444';
-        }
-      }
-    }
-  };
-
-  window.confirmVerification = async function() {
-    if (!isCodeVerified || !pendingUserData) {
-      toastMsg('الرجاء إدخال رمز التفعيل الصحيح', false);
-      return;
-    }
-    clearInterval(codeTimer);
-    await completeRegistration();
-  };
-
-  // ========== إنهاء التسجيل بالموارد الإجبارية ==========
-  async function completeRegistration() {
-    if (!pendingUserData) return;
-    
-    const userData = pendingUserData;
-    showLoading(true);
-    
-    try {
-      // إنشاء الحساب في Firebase Auth
-      const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
-      const uid = userCredential.user.uid;
-      
-      // بيانات الملف الشخصي
-      const profileData = {
-        uid: uid,
-        email: userData.email,
-        username: userData.name,
-        userId: userData.userId,
-        emoji: userData.emoji,
-        avatarType: 'emoji',
-        avatarUrl: '',
-        colors: {
-          frame: '#fbbf24',
-          name: '#0f172a',
-          id: '#8b5cf6',
-          postText: '#334155',
-          commentText: '#475569'
-        },
-        bio: '',
-        relationship: 'اعزب',
-        secondaryId: '',
-        verified: false,
-        banned: false,
-        friendId: friendData.userId,
-        friendUid: friendUid,
-        createdAt: new Date().toISOString()
-      };
-      
-      // حفظ البيانات في Firestore
-      await setDoc(doc(db, "users", uid), profileData);
-      await setDoc(doc(db, "users_by_id", userData.userId), { uid: uid, userId: userData.userId });
-      
-      // 🔥 كتابة الموارد الإجبارية الثابتة (السيرفر يفرض هذه القيم)
-      await setDoc(doc(db, "resources", uid), MANDATORY_RESOURCES);
-      
-      // عرض شاشة النجاح
-      renderSuccessScreen(profileData, MANDATORY_RESOURCES, true);
-      toastMsg('🎉 تم التسجيل! الموارد: 0 عملة، 1 ذهب، 1 إكسير');
-      
-    } catch (error) {
-      console.error("فشل التسجيل:", error);
-      let message = 'فشل إنشاء الحساب';
-      if (error.code === 'auth/email-already-in-use') {
-        message = 'هذا البريد الإلكتروني مستخدم مسبقاً';
-      } else if (error.code === 'auth/weak-password') {
-        message = 'كلمة المرور ضعيفة جداً';
-      }
-      toastMsg(message, false);
-    } finally {
-      showLoading(false);
-    }
-  }
-
-  // ========== تسجيل الدخول ==========
-  async function handleLogin() {
-    clearAllErrors();
-    
-    const email = document.getElementById('loginEmail').value.trim();
-    const password = document.getElementById('loginPassword').value;
-    
-    if (!email) { showFieldError('loginEmail', 'البريد الإلكتروني مطلوب'); return; }
-    if (!password) { showFieldError('loginPassword', 'كلمة المرور مطلوبة'); return; }
-    
-    showLoading(true);
-    
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const uid = userCredential.user.uid;
-      
-      let userData = { username: 'مستخدم', userId: generateUserId(), emoji: '😎' };
-      let resourceData = { ...MANDATORY_RESOURCES };
-      
-      try {
-        const userSnap = await getDoc(doc(db, "users", uid));
-        if (userSnap.exists()) userData = userSnap.data();
-        
-        const resSnap = await getDoc(doc(db, "resources", uid));
-        if (resSnap.exists()) resourceData = resSnap.data();
-      } catch (e) {
-        console.warn("بعض بيانات المستخدم غير متوفرة:", e);
-      }
-      
-      renderSuccessScreen(userData, resourceData, false);
-      toastMsg('تم تسجيل الدخول بنجاح');
-      
-    } catch (error) {
-      console.error("فشل الدخول:", error);
-      let message = 'بيانات الدخول غير صحيحة';
-      if (error.code === 'auth/user-not-found') message = 'الحساب غير موجود';
-      else if (error.code === 'auth/wrong-password') message = 'كلمة المرور خاطئة';
-      else if (error.code === 'auth/invalid-email') message = 'صيغة البريد غير صحيحة';
-      toastMsg(message, false);
-    } finally {
-      showLoading(false);
-    }
-  }
-
-  // ========== بدء التسجيل (التحقق من البيانات) ==========
-  async function handleRegister() {
-    clearAllErrors();
-    
-    const name = document.getElementById('regName').value.trim();
-    const email = document.getElementById('regEmail').value.trim();
-    const password = document.getElementById('regPassword').value;
-    const confirmPassword = document.getElementById('regConfirm').value;
-    
-    let isValid = true;
-    
-    if (!name || name.length < 2) {
-      showFieldError('regName', 'الاسم يجب أن يكون حرفين على الأقل');
-      isValid = false;
-    }
-    
-    if (!email) {
-      showFieldError('regEmail', 'البريد الإلكتروني مطلوب');
-      isValid = false;
-    } else if (email.length < 5 || !email.includes('@')) {
-      showFieldError('regEmail', 'صيغة بريد إلكتروني غير صحيحة');
-      isValid = false;
-    }
-    
-    if (!password || password.length < 6) {
-      showFieldError('regPassword', 'كلمة المرور يجب أن تكون 6 أحرف على الأقل');
-      isValid = false;
-    }
-    
-    if (password !== confirmPassword) {
-      showFieldError('regConfirm', 'كلمتا المرور غير متطابقتين');
-      isValid = false;
-    }
-    
-    if (!isFriendValid || !friendData) {
-      showFieldError('friendId', 'معرف الصديق إجباري وغير صحيح');
-      isValid = false;
-    }
-    
-    if (!isValid) return;
-    
-    const newUserId = generateUserId();
-    
-    // حفظ بيانات المستخدم مؤقتاً لحين التفعيل
-    pendingUserData = {
-      name: name,
-      email: email,
-      password: password,
-      userId: newUserId,
-      emoji: selectedEmoji
+async function completeRegistration(){
+  if(!pendingUserData)return;
+  var d=pendingUserData;
+  showL(true);
+  try{
+    var cred=await createUserWithEmailAndPassword(auth,d.email,d.pass);
+    var ud={
+      uid:cred.user.uid,
+      email:d.email,
+      username:d.name,
+      userId:d.userId,
+      emoji:d.emoji,
+      avatarType:'emoji',
+      avatarUrl:'',
+      colors:{frame:'#fbbf24',name:'#0f172a',id:'#8b5cf6',postText:'#334155',commentText:'#475569'},
+      bio:'',
+      relationship:'اعزب',
+      secondaryId:'',
+      verified:false,
+      banned:false,
+      friendId:friendData.userId,
+      friendUid:friendUid,
+      createdAt:new Date().toISOString()
     };
     
-    // الانتقال إلى شاشة التفعيل
-    showVerificationSection(email);
-  }
-
-  // ========== عرض شاشة النجاح النهائية ==========
-  function renderSuccessScreen(userData, resources, isNewAccount = false) {
-    const container = document.getElementById('appContainer');
+    try{
+      await setDoc(doc(db,"users",cred.user.uid),ud);
+      await setDoc(doc(db,"users_by_id",d.userId),{uid:cred.user.uid,userId:d.userId});
+      await setDoc(doc(db,"resources",cred.user.uid),d.defRes);
+    }catch(e){
+      try{
+        await setDoc(doc(db,"users",cred.user.uid),ud);
+        await setDoc(doc(db,"resources",cred.user.uid),d.defRes);
+      }catch(e2){
+        console.error('خطأ في حفظ البيانات:',e2);
+      }
+    }
     
-    const moneyValue = (resources.money ?? MANDATORY_RESOURCES.money).toLocaleString();
-    const goldValue = (resources.gold ?? MANDATORY_RESOURCES.gold).toLocaleString();
-    const elixirValue = (resources.elixir ?? MANDATORY_RESOURCES.elixir).toLocaleString();
-    const oilValue = (resources.oil ?? MANDATORY_RESOURCES.oil).toLocaleString();
-    const ddoValue = (resources.ddo ?? MANDATORY_RESOURCES.ddo).toLocaleString();
-    
-    container.innerHTML = `
-      <div class="success-box">
-        <i class="fas fa-check-circle"></i>
-        <h2>${isNewAccount ? '🎉 تم التسجيل!' : 'مرحباً بعودتك'}</h2>
-        <p style="font-size:18px; margin:8px 0;">${userData.username || 'مستخدم'}</p>
-        
-        <div style="background:#f8fafc; border-radius:32px; padding:24px; margin-top:16px">
-          <div style="font-size:64px">${userData.emoji || '😎'}</div>
-          
-          <div class="user-badge">
-            <div class="id-big">#${userData.userId || '------'}</div>
-          </div>
-          
-          ${userData.friendId ? `
-          <div style="background:#f0fdf4; border-radius:16px; padding:10px; margin:8px 0; border:1px solid #10b981;">
-            <i class="fas fa-user-friends"></i> مسجل عبر الصديق: <strong>#${userData.friendId}</strong>
-          </div>` : ''}
-          
-          <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin-top:16px">
-            <div style="background:#d1fae5; padding:12px; border-radius:14px; text-align:center;">
-              <i class="fas fa-coins"></i><br>
-              <strong style="font-size:18px;">${moneyValue}</strong><br>
-              <small>مال (TMR)</small>
-            </div>
-            <div style="background:#fef3c7; padding:12px; border-radius:14px; text-align:center;">
-              <i class="fas fa-gem"></i><br>
-              <strong style="font-size:18px;">${goldValue}</strong><br>
-              <small>ذهب</small>
-            </div>
-            <div style="background:#ede9fe; padding:12px; border-radius:14px; text-align:center;">
-              <i class="fas fa-flask"></i><br>
-              <strong style="font-size:18px;">${elixirValue}</strong><br>
-              <small>إكسير</small>
-            </div>
-            <div style="background:#cffafe; padding:12px; border-radius:14px; text-align:center;">
-              <i class="fas fa-oil-can"></i><br>
-              <strong style="font-size:18px;">${oilValue}</strong><br>
-              <small>نفط</small>
-            </div>
-            ${parseInt(resources.ddo) > 0 ? `
-            <div style="background:#fce7f3; padding:12px; border-radius:14px; text-align:center; grid-column: span 2;">
-              <i class="fas fa-gem"></i><br>
-              <strong style="font-size:18px;">${ddoValue}</strong><br>
-              <small>DDO</small>
-            </div>` : ''}
-          </div>
-        </div>
-        
-        <button class="btn" style="margin-top:28px" onclick="location.reload()">
-          <i class="fas fa-redo"></i> ${isNewAccount ? 'تسجيل حساب آخر' : 'تسجيل الدخول مجدداً'}
-        </button>
-      </div>
-    `;
-  }
+    renderSuccess(ud,d.defRes,true);
+    toastMsg('🎉 تم التسجيل! حصلت على '+d.defRes.money.toLocaleString()+' عملة');
+  }catch(e){
+    var m='فشل التسجيل';
+    if(e.code==='auth/email-already-in-use')m='البريد مستخدم مسبقاً';
+    else if(e.code==='auth/weak-password')m='كلمة المرور ضعيفة جداً';
+    else if(e.code==='auth/invalid-email')m='صيغة البريد غير صحيحة';
+    toastMsg('❌ '+m,false);
+  }finally{showL(false)}
+}
 
-  // ========== ربط الأحداث ==========
-  document.getElementById('loginBtn').addEventListener('click', handleLogin);
-  document.getElementById('registerBtn').addEventListener('click', handleRegister);
-  
-  document.getElementById('showRegisterLink').addEventListener('click', (e) => {
-    e.preventDefault();
-    document.getElementById('loginSection').style.display = 'none';
-    document.getElementById('registerSection').style.display = 'block';
-    document.getElementById('verifySection').style.display = 'none';
-    document.getElementById('randomIdPreview').textContent = generateUserId();
-    document.getElementById('registerBtn').disabled = true;
-    clearAllErrors();
-    document.getElementById('friendId').value = '';
-    document.getElementById('friendPreview').style.display = 'none';
-    isFriendValid = false;
+function renderSuccess(ud,res,isNew){
+  document.getElementById('appContainer').innerHTML='<div class="success-box"><i class="fas fa-check-circle"></i><h2>'+(isNew?'تم التسجيل!':'مرحباً بعودتك')+'</h2><p>'+(ud.username||'مستخدم')+'</p><div style="background:#f8fafc;border-radius:32px;padding:24px;margin-top:16px"><div style="font-size:64px">'+(ud.emoji||'😎')+'</div><div class="user-badge"><div class="id-big">#'+ud.userId+'</div></div>'+(ud.friendId?'<div style="background:#f0fdf4;border-radius:16px;padding:10px;margin:8px 0"><i class="fas fa-user-friends"></i> مسجل عبر الصديق: #'+ud.friendId+'</div>':'')+'<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px"><div style="background:#d1fae5;padding:10px;border-radius:14px"><i class="fas fa-coins"></i><strong>'+(res.money||0).toLocaleString()+'</strong><br><small>مال</small></div><div style="background:#fef3c7;padding:10px;border-radius:14px"><i class="fas fa-gem"></i><strong>'+(res.gold||0).toLocaleString()+'</strong><br><small>ذهب</small></div><div style="background:#ede9fe;padding:10px;border-radius:14px"><i class="fas fa-flask"></i><strong>'+(res.elixir||0).toLocaleString()+'</strong><br><small>إكسير</small></div><div style="background:#cffafe;padding:10px;border-radius:14px"><i class="fas fa-oil-can"></i><strong>'+(res.oil||0).toLocaleString()+'</strong><br><small>نفط</small></div>'+(res.ddo>0?'<div style="background:#fce7f3;padding:10px;border-radius:14px;grid-column:span 2"><i class="fas fa-gem"></i><strong>'+(res.ddo||0).toLocaleString()+'</strong><br><small>DDO</small></div>':'')+'</div></div><button class="btn" style="margin-top:28px" onclick="window.location.href=\'https://amanhsn55555-eng.github.io/Mnstty-tody/\'">📱 الذهاب إلى المنصة</button></div>';
+}
+
+// ========== الأحداث ==========
+document.getElementById('loginBtn').addEventListener('click',handleLogin);
+document.getElementById('registerBtn').addEventListener('click',handleRegister);
+
+document.getElementById('showRegisterLink').addEventListener('click',function(e){
+  e.preventDefault();
+  document.getElementById('loginSection').style.display='none';
+  document.getElementById('registerSection').style.display='block';
+  document.getElementById('verifySection').style.display='none';
+  document.getElementById('randomIdPreview').textContent=genId();
+  document.getElementById('registerBtn').disabled=true;
+  clearErrors();
+});
+
+document.getElementById('showLoginLink').addEventListener('click',function(e){
+  e.preventDefault();
+  document.getElementById('registerSection').style.display='none';
+  document.getElementById('verifySection').style.display='none';
+  document.getElementById('loginSection').style.display='block';
+  clearErrors();
+});
+
+document.querySelectorAll('.emoji-pick').forEach(function(el){
+  el.addEventListener('click',function(){
+    document.querySelectorAll('.emoji-pick').forEach(function(e){e.classList.remove('selected')});
+    el.classList.add('selected');
+    selectedEmoji=el.dataset.emoji;
   });
-  
-  document.getElementById('showLoginLink').addEventListener('click', (e) => {
-    e.preventDefault();
-    document.getElementById('registerSection').style.display = 'none';
-    document.getElementById('verifySection').style.display = 'none';
-    document.getElementById('loginSection').style.display = 'block';
-    clearAllErrors();
-  });
-  
-  // اختيار الإيموجي
-  document.querySelectorAll('.emoji-pick').forEach(el => {
-    el.addEventListener('click', function() {
-      document.querySelectorAll('.emoji-pick').forEach(e => e.classList.remove('selected'));
-      this.classList.add('selected');
-      selectedEmoji = this.dataset.emoji;
-    });
-  });
-  
-  // دعم زر Enter
-  document.getElementById('loginPassword').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') handleLogin();
-  });
-  document.getElementById('regConfirm').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') handleRegister();
-  });
-  
-  // توليد معرف عشوائي عند التحميل
-  window.addEventListener('load', () => {
-    document.getElementById('randomIdPreview').textContent = generateUserId();
-  });
+});
+
+window.addEventListener('load',function(){
+  document.getElementById('randomIdPreview').textContent=genId();
+});
+
+document.getElementById('loginPassword').addEventListener('keypress',function(e){
+  if(e.key==='Enter')handleLogin();
+});
+
+document.getElementById('regConfirm').addEventListener('keypress',function(e){
+  if(e.key==='Enter')handleRegister();
+});
 </script>
 </body>
 </html>
